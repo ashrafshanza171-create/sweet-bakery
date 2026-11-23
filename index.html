@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crumb & Cream | Artisan Home Bakery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FFFDF9',
+                        blush: '#FCEEF2',
+                        rose: '#D86C88',
+                        roseDark: '#B84D69',
+                        cocoa: '#3E2723',
+                        caramel: '#C88A55',
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FFFDF9; color: #3E2723; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .page-section { display: none; animation: fadeIn 0.35s ease-in-out; }
+        .page-section.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .nav-link.active { color: #D86C88; font-weight: 700; border-bottom: 2px solid #D86C88; }
+        
+        .cake-shape-round { border-radius: 9999px; }
+        .cake-shape-square { border-radius: 16px; }
+        .cake-shape-rectangle { border-radius: 16px; width: 250px !important; height: 165px !important; }
+        .cake-shape-hexagon { clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%); border-radius: 0; }
+        .cake-shape-heart {
+            position: relative;
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-cream/95 backdrop-blur-md border-b border-rose/15 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div onclick="navigateTo('home')" class="flex items-center gap-3 cursor-pointer">
+                    <div class="w-10 h-10 rounded-full bg-rose text-white flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-cake-candles text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="font-serif text-xl sm:text-2xl font-bold text-cocoa tracking-tight block leading-none">Crumb & Cream</span>
+                        <span class="text-[11px] uppercase tracking-widest text-rose font-semibold">Artisan Home Bakery</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center space-x-7">
+                    <button onclick="navigateTo('home')" id="nav-home" class="nav-link active py-1 text-sm font-medium hover:text-rose transition">Home</button>
+                    <button onclick="navigateTo('menu')" id="nav-menu" class="nav-link py-1 text-sm font-medium hover:text-rose transition">Menu</button>
+                    <button onclick="navigateTo('cakes')" id="nav-cakes" class="nav-link py-1 text-sm font-medium hover:text-rose transition">Cakes & Flavors</button>
+                    <button onclick="navigateTo('customize')" id="nav-customize" class="nav-link py-1 text-sm font-medium hover:text-rose transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-wand-magic-sparkles text-rose"></i> Customize Your Cake
+                    </button>
+                    <button onclick="navigateTo('order')" id="nav-order" class="bg-rose hover:bg-roseDark text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-sm transition flex items-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-base"></i> Contact / Order
+                    </button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-cocoa p-2 rounded-lg hover:bg-blush">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-cream border-b border-rose/15 px-4 pt-2 pb-5 space-y-2">
+            <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-blush font-medium">Home</button>
+            <button onclick="navigateTo('menu'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-blush font-medium">Menu</button>
+            <button onclick="navigateTo('cakes'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg hover:bg-blush font-medium">Cakes & Flavors</button>
+            <button onclick="navigateTo('customize'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg bg-blush text-rose font-semibold">✨ Customize Your Cake</button>
+            <button onclick="navigateTo('order'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg bg-rose text-white font-semibold">Contact / Order</button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow">
+
+        <!-- ==================== 1. HOME PAGE ==================== -->
+        <section id="page-home" class="page-section active">
+            <div class="relative bg-blush/60 overflow-hidden">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-24">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div class="space-y-6 text-center lg:text-left">
+                            <span class="inline-block bg-white text-rose px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
+                                Freshly Baked From Scratch • 100% Homemade
+                            </span>
+                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-cocoa leading-tight">
+                                Crumb & Cream <span class="text-rose italic block sm:inline">Home Bakery</span>
+                            </h1>
+                            <p class="text-lg sm:text-xl text-cocoa/80 max-w-xl mx-auto lg:mx-0">
+                                Handcrafted celebration cakes, fudgy brownies, and artisanal pastries baked with pure butter, Belgian chocolate, and love.
+                            </p>
+                            <div class="flex flex-wrap justify-center lg:justify-start gap-3.5 pt-2">
+                                <button onclick="navigateTo('customize')" class="bg-rose hover:bg-roseDark text-white px-6 py-3.5 rounded-full font-semibold shadow-md transition flex items-center gap-2">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> Customize Your Cake
+                                </button>
+                                <button onclick="navigateTo('cakes')" class="bg-cocoa hover:bg-cocoa/90 text-white px-6 py-3.5 rounded-full font-semibold shadow-md transition">
+                                    View Cakes
+                                </button>
+                                <button onclick="navigateTo('menu')" class="bg-white hover:bg-blush text-cocoa border border-cocoa/20 px-6 py-3.5 rounded-full font-semibold transition">
+                                    View Menu
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="relative">
+                            <div class="rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-[4/3]">
+                                <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1000&q=85" 
+                                     onerror="this.src='https://images.unsplash.com/photo-1562777717-dc6984f65a63?auto=format&fit=crop&w=1000&q=85'"
+                                     alt="Signature Home Bakery Cake" class="w-full h-full object-cover">
+                            </div>
+                            <div class="hidden sm:flex items-center gap-3 bg-white p-4 rounded-2xl shadow-lg absolute -bottom-5 -left-5 border border-rose/10">
+                                <div class="w-12 h-12 rounded-full bg-blush text-rose flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-heart"></i>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-sm text-cocoa">Made to Order</p>
+                                    <p class="text-xs text-cocoa/70">Zero preservatives, 100% fresh</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Us Section -->
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-sm border border-rose/15 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                    <div class="md:col-span-5">
+                        <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=700&q=80" 
+                             onerror="this.src='https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=700&q=80'"
+                             alt="Home Baker Decorating" class="rounded-2xl w-full h-72 object-cover shadow-md">
+                    </div>
+                    <div class="md:col-span-7 space-y-4">
+                        <span class="text-rose font-bold text-xs uppercase tracking-widest">About Us</span>
+                        <h2 class="text-3xl font-bold text-cocoa">Baked in Our Home Kitchen, Shared at Your Table</h2>
+                        <p class="text-cocoa/80 leading-relaxed">
+                            What started as weekend baking for family birthdays has grown into <strong>Crumb & Cream Home Bakery</strong>. Unlike commercial factories, every sponge is whisked in small batches, every ganache is made with real couverture chocolate, and every floral petal is piped by hand right before delivery.
+                        </p>
+                        <div class="grid grid-cols-3 gap-4 pt-3 border-t border-rose/10">
+                            <div>
+                                <p class="font-serif text-2xl font-bold text-rose">100%</p>
+                                <p class="text-xs text-cocoa/70">Fresh Ingredients</p>
+                            </div>
+                            <div>
+                                <p class="font-serif text-2xl font-bold text-rose">500+</p>
+                                <p class="text-xs text-cocoa/70">Custom Cakes</p>
+                            </div>
+                            <div>
+                                <p class="font-serif text-2xl font-bold text-rose">24 Hr</p>
+                                <p class="text-xs text-cocoa/70">Advance Notice</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Details Section -->
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-cocoa">Get In Touch</h2>
+                    <p class="text-cocoa/70 mt-1">Have a question or want to discuss a custom design? Reach out anytime.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <a href="https://wa.me/923001234567?text=Assalam-o-Alaikum!%20I%20would%20like%20to%20inquire%20about%20a%20cake%20order." target="_blank" 
+                       class="bg-white hover:bg-green-50/60 border border-green-200 rounded-2xl p-6 flex items-center gap-4 shadow-sm transition group">
+                        <div class="w-14 h-14 rounded-2xl bg-green-500 text-white flex items-center justify-center text-2xl group-hover:scale-105 transition">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold uppercase text-green-700">WhatsApp Chat</p>
+                            <p class="font-bold text-lg text-cocoa">+92 300 1234567</p>
+                            <p class="text-xs text-cocoa/60">Tap to message directly</p>
+                        </div>
+                    </a>
+
+                    <a href="tel:+923001234567" 
+                       class="bg-white hover:bg-blush/50 border border-rose/20 rounded-2xl p-6 flex items-center gap-4 shadow-sm transition group">
+                        <div class="w-14 h-14 rounded-2xl bg-rose text-white flex items-center justify-center text-2xl group-hover:scale-105 transition">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold uppercase text-rose">Call Us</p>
+                            <p class="font-bold text-lg text-cocoa">0300-1234567</p>
+                            <p class="text-xs text-cocoa/60">10:00 AM – 9:00 PM</p>
+                        </div>
+                    </a>
+
+                    <a href="https://instagram.com" target="_blank" 
+                       class="bg-white hover:bg-pink-50/60 border border-pink-200 rounded-2xl p-6 flex items-center gap-4 shadow-sm transition group">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 text-white flex items-center justify-center text-2xl group-hover:scale-105 transition">
+                            <i class="fa-brands fa-instagram"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold uppercase text-pink-600">Instagram</p>
+                            <p class="font-bold text-lg text-cocoa">@crumbandcream.pk</p>
+                            <p class="text-xs text-cocoa/60">See our latest cake reels</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 2. MENU PAGE ==================== -->
+        <section id="page-menu" class="page-section py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="text-rose font-bold text-xs uppercase tracking-widest">Fresh Daily Treats</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-cocoa mt-1">Our Bakery Menu</h2>
+                    <p class="text-cocoa/70 mt-2">Browse our selection of cakes, cupcakes, pastries, and brownies. Click any item to order.</p>
+                </div>
+
+                <!-- Category Filter Pills -->
+                <div class="flex flex-wrap justify-center gap-2 mb-10" id="menu-filters">
+                    <button onclick="filterMenu('All', this)" class="menu-filter-btn active bg-rose text-white px-5 py-2 rounded-full text-sm font-semibold transition">All Items</button>
+                    <button onclick="filterMenu('Cakes', this)" class="menu-filter-btn bg-white text-cocoa border border-rose/20 hover:bg-blush px-5 py-2 rounded-full text-sm font-semibold transition">Cakes</button>
+                    <button onclick="filterMenu('Cupcakes', this)" class="menu-filter-btn bg-white text-cocoa border border-rose/20 hover:bg-blush px-5 py-2 rounded-full text-sm font-semibold transition">Cupcakes</button>
+                    <button onclick="filterMenu('Pastries', this)" class="menu-filter-btn bg-white text-cocoa border border-rose/20 hover:bg-blush px-5 py-2 rounded-full text-sm font-semibold transition">Pastries</button>
+                    <button onclick="filterMenu('Brownies', this)" class="menu-filter-btn bg-white text-cocoa border border-rose/20 hover:bg-blush px-5 py-2 rounded-full text-sm font-semibold transition">Brownies</button>
+                </div>
+
+                <!-- Menu Cards Grid -->
+                <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Rendered dynamically via JS -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 3. CAKES & FLAVORS PAGE ==================== -->
+        <section id="page-cakes" class="page-section py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <span class="text-rose font-bold text-xs uppercase tracking-widest">Celebration Collection</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-cocoa mt-1">Signature Cakes & Sizes</h2>
+                    <p class="text-cocoa/70 mt-2">Select a cake size (1 lb, 2 lb, or 3 lb) on any card to view its price and servings.</p>
+                </div>
+
+                <div id="signature-cakes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+                    <!-- Rendered dynamically via JS -->
+                </div>
+
+                <div class="bg-blush/60 rounded-3xl p-8 sm:p-12 border border-rose/15">
+                    <div class="text-center max-w-xl mx-auto mb-10">
+                        <span class="text-rose font-bold text-xs uppercase tracking-widest">Baked Fresh</span>
+                        <h3 class="text-3xl font-bold text-cocoa mt-1">Available Sponge Flavors</h3>
+                        <p class="text-cocoa/70 text-sm mt-2">Every custom and signature cake is baked using these rich, moist sponge bases.</p>
+                    </div>
+
+                    <div id="flavors-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Rendered dynamically via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 4. CUSTOMIZE YOUR CAKE ==================== -->
+        <section id="page-customize" class="page-section py-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="bg-blush text-rose px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Interactive Cake Studio</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-cocoa mt-2">Design Your Custom Cake</h2>
+                    <p class="text-cocoa/70 mt-1">Customize every layer step by step and watch your cake preview & price update live.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- LEFT COLUMN: BUILDER -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose/15">
+                            <h3 class="text-lg font-bold text-cocoa mb-3 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">1</span>
+                                Choose Cake Shape
+                            </h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="shape-options"></div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose/15">
+                            <h3 class="text-lg font-bold text-cocoa mb-3 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">2</span>
+                                Choose Size & Weight
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="size-options"></div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose/15">
+                            <h3 class="text-lg font-bold text-cocoa mb-3 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">3</span>
+                                Choose Sponge Flavor
+                            </h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="sponge-options"></div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose/15">
+                            <h3 class="text-lg font-bold text-cocoa mb-3 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">4</span>
+                                Choose Frosting & Filling
+                            </h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="frosting-options"></div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose/15">
+                            <h3 class="text-lg font-bold text-cocoa mb-3 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">5</span>
+                                Choose Design Style
+                            </h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="design-options"></div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose/15">
+                            <h3 class="text-lg font-bold text-cocoa mb-3 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">6</span>
+                                Add a Note on the Cake
+                            </h3>
+                            <input type="text" id="cake-note-input" maxlength="35" oninput="updateCakeNote(this.value)"
+                                   placeholder='e.g. "Happy Birthday Ali"' 
+                                   class="w-full px-4 py-3 rounded-xl border border-cocoa/20 focus:outline-none focus:border-rose bg-cream" value="Happy Birthday!">
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN: LIVE PREVIEW -->
+                    <div class="lg:col-span-5 lg:sticky lg:top-24 space-y-5">
+                        <div class="bg-white rounded-3xl p-6 shadow-lg border border-rose/20">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-xs font-bold uppercase tracking-wider text-rose flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-rose animate-ping"></span> Live Cake Preview
+                                </span>
+                                <span id="preview-badge" class="text-xs bg-blush text-cocoa font-semibold px-3 py-1 rounded-full">
+                                    Round • 1 lb
+                                </span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-blush/50 p-4 rounded-2xl border border-rose/10 mb-5">
+                                <div class="flex flex-col items-center justify-center bg-white rounded-xl p-4 min-h-[210px] shadow-inner relative overflow-hidden">
+                                    <span class="text-[10px] uppercase tracking-wider text-cocoa/50 font-bold absolute top-2 left-3">Top View</span>
+                                    <div id="live-cake-visual" class="w-36 h-36 cake-shape-round flex items-center justify-center p-3 text-center shadow-md transition-all duration-300 border-4"
+                                         style="background-color: #FFF5E4; border-color: #E6C29F;">
+                                        <svg id="heart-svg" class="hidden w-36 h-36 drop-shadow-md" viewBox="0 0 100 100">
+                                            <path id="heart-path" d="M50 88 C20 65, 5 45, 5 28 C5 14, 16 5, 29 5 C38 5, 46 10, 50 18 C54 10, 62 5, 71 5 C84 5, 95 14, 95 28 C95 45, 80 65, 50 88 Z" 
+                                                  fill="#FFF5E4" stroke="#E6C29F" stroke-width="4"/>
+                                        </svg>
+                                        <span id="live-cake-text" class="font-serif italic text-xs font-bold text-cocoa z-10 break-words max-w-[110px]">
+                                            Happy Birthday!
+                                        </span>
+                                    </div>
+                                    <span id="live-flavor-label" class="text-[11px] font-medium text-cocoa/70 mt-2">Vanilla Sponge</span>
+                                </div>
+
+                                <div class="flex flex-col justify-between bg-white rounded-xl p-2 shadow-inner relative overflow-hidden">
+                                    <span class="text-[10px] uppercase tracking-wider bg-white/90 px-2 py-0.5 rounded text-cocoa font-bold absolute top-3 left-3 z-10 shadow-sm">
+                                        Style Inspiration
+                                    </span>
+                                    <img id="live-design-img" src="https://images.unsplash.com/photo-1562777717-dc6984f65a63?auto=format&fit=crop&w=500&q=80" 
+                                         onerror="this.src='https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=500&q=80'"
+                                         alt="Cake Design Preview" class="w-full h-44 object-cover rounded-lg transition-all duration-300">
+                                    <p id="live-design-caption" class="text-center text-xs font-semibold text-cocoa py-1.5">Floral Style</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2 text-sm border-t border-b border-rose/15 py-4 mb-5">
+                                <div class="flex justify-between">
+                                    <span class="text-cocoa/70">Shape & Size:</span>
+                                    <span id="sum-shape-size" class="font-semibold text-cocoa">Round • 1 lb</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-cocoa/70">Sponge Flavor:</span>
+                                    <span id="sum-flavor" class="font-semibold text-cocoa">Vanilla Bean</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-cocoa/70">Frosting & Filling:</span>
+                                    <span id="sum-frosting" class="font-semibold text-cocoa">Buttercream</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-cocoa/70">Design Idea:</span>
+                                    <span id="sum-design" class="font-semibold text-cocoa">Floral</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-cocoa/70">Cake Message:</span>
+                                    <span id="sum-note" class="font-semibold text-rose italic">"Happy Birthday!"</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between mb-5">
+                                <div>
+                                    <span class="text-xs text-cocoa/60 block">Estimated Total</span>
+                                    <span id="sum-price" class="text-3xl font-serif font-bold text-cocoa">Rs. 1,800</span>
+                                </div>
+                                <button onclick="proceedToOrderWithCustomCake()" 
+                                        class="bg-rose hover:bg-roseDark text-white px-6 py-3.5 rounded-full font-semibold shadow-md transition flex items-center gap-2">
+                                    Proceed to Order <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 5. CONTACT / ORDER PAGE ==================== -->
+        <section id="page-order" class="page-section py-12">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-xl mx-auto mb-10">
+                    <span class="text-rose font-bold text-xs uppercase tracking-widest">Fast WhatsApp Checkout</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-cocoa mt-1">Complete Your Order</h2>
+                    <p class="text-cocoa/70 mt-2">Fill in your delivery details below and send your complete order directly to our WhatsApp.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <form onsubmit="sendOrderOnWhatsApp(event)" class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-rose/15 space-y-5">
+                        <h3 class="text-xl font-bold text-cocoa border-b border-rose/10 pb-3">Delivery Details</h3>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-cocoa mb-1">Full Name *</label>
+                            <input type="text" id="cust-name" required placeholder="Enter your name"
+                                   class="w-full px-4 py-3 rounded-xl border border-cocoa/20 focus:outline-none focus:border-rose bg-cream">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-cocoa mb-1">Phone / WhatsApp Number *</label>
+                                <input type="tel" id="cust-phone" required placeholder="0300-1234567"
+                                       class="w-full px-4 py-3 rounded-xl border border-cocoa/20 focus:outline-none focus:border-rose bg-cream">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-cocoa mb-1">Delivery Date *</label>
+                                <input type="date" id="cust-date" required
+                                       class="w-full px-4 py-3 rounded-xl border border-cocoa/20 focus:outline-none focus:border-rose bg-cream">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-cocoa mb-1">Complete Delivery Address *</label>
+                            <textarea id="cust-address" rows="3" required placeholder="House #, Street, Area / Sector, City"
+                                      class="w-full px-4 py-3 rounded-xl border border-cocoa/20 focus:outline-none focus:border-rose bg-cream"></textarea>
+                        </div>
+
+                        <button type="submit" 
+                                class="w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white py-4 rounded-2xl font-bold text-base shadow-md transition flex items-center justify-center gap-2.5">
+                            <i class="fa-brands fa-whatsapp text-2xl"></i> Send Order on WhatsApp
+                        </button>
+                    </form>
+
+                    <div class="lg:col-span-5">
+                        <div class="bg-blush/70 p-6 sm:p-8 rounded-3xl border border-rose/20 space-y-4">
+                            <div class="flex justify-between items-center border-b border-rose/15 pb-3">
+                                <h3 class="text-xl font-bold text-cocoa">Order Summary</h3>
+                                <button onclick="navigateTo('customize')" class="text-xs font-bold text-rose hover:underline">Edit Cake</button>
+                            </div>
+
+                            <div id="order-summary-box" class="space-y-2.5 text-sm text-cocoa"></div>
+
+                            <div class="border-t border-rose/15 pt-4 flex justify-between items-center">
+                                <span class="font-bold text-cocoa">Total Payable:</span>
+                                <span id="order-total-display" class="text-2xl font-serif font-bold text-rose">Rs. 1,800</span>
+                            </div>
+
+                            <div class="bg-white/80 p-3.5 rounded-xl text-xs text-cocoa/75 flex gap-2.5 items-start">
+                                <i class="fa-solid fa-circle-info text-rose mt-0.5"></i>
+                                <p>Clicking the green button will open WhatsApp with all your cake & delivery details pre-filled for instant confirmation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-cocoa text-cream/80 py-10 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <p class="font-serif text-xl font-bold text-white">Crumb & Cream Home Bakery</p>
+                <p class="text-xs text-cream/60 mt-1">Handcrafted cakes & desserts baked fresh to order.</p>
+            </div>
+            <div class="flex gap-6 text-sm">
+                <button onclick="navigateTo('home')" class="hover:text-white">Home</button>
+                <button onclick="navigateTo('menu')" class="hover:text-white">Menu</button>
+                <button onclick="navigateTo('cakes')" class="hover:text-white">Cakes & Flavors</button>
+                <button onclick="navigateTo('customize')" class="hover:text-white">Customize</button>
+            </div>
+            <div class="flex gap-4">
+                <a href="https://wa.me/923001234567" target="_blank" class="w-9 h-9 rounded-full bg-white/10 hover:bg-rose flex items-center justify-center text-white transition">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </a>
+                <a href="https://instagram.com" target="_blank" class="w-9 h-9 rounded-full bg-white/10 hover:bg-rose flex items-center justify-center text-white transition">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        const FALLBACK_IMG = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80";
+
+        const menuItems = [
+            { 
+                name: "Belgian Chocolate Truffle Cake", 
+                category: "Cakes", 
+                price: 2200, 
+                desc: "Rich dark chocolate sponge layered with silky Belgian ganache.", 
+                img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Red Velvet Cream Cheese Cupcakes", 
+                category: "Cupcakes", 
+                price: 1200, 
+                desc: "Velvety cocoa cupcakes topped with tangy Madagascar vanilla cream cheese.", 
+                img: "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Fudgy Walnut Brownies (Box)", 
+                category: "Brownies", 
+                price: 1100, 
+                desc: "Crinkly-top dark chocolate brownies loaded with roasted walnuts.", 
+                img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Strawberry Mille-Feuille Pastry", 
+                category: "Pastries", 
+                price: 450, 
+                desc: "Flaky puff pastry layers with diplomat vanilla cream & fresh berries.", 
+                img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Salted Caramel Drip Cake", 
+                category: "Cakes", 
+                price: 2400, 
+                desc: "Brown sugar sponge with house-made salted caramel & Swiss meringue.", 
+                img: "https://images.unsplash.com/photo-1535141192574-5d4897c12636?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Nutella Hazelnut Cupcakes", 
+                category: "Cupcakes", 
+                price: 1350, 
+                desc: "Chocolate cupcakes filled with gooey Nutella & topped with Ferrero.", 
+                img: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Lotus Biscoff Tres Leches", 
+                category: "Pastries", 
+                price: 550, 
+                desc: "Three-milk soaked sponge topped with whipped cream & Biscoff spread.", 
+                img: "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Triple Chocolate Chunk Brownies", 
+                category: "Brownies", 
+                price: 1150, 
+                desc: "Infused with milk, dark, and white chocolate chunks.", 
+                img: "https://images.unsplash.com/photo-1564355808539-22fda35bed7e?auto=format&fit=crop&w=600&q=80" 
+            }
+        ];
+
+        const signatureCakes = [
+            {
+                name: "Chocolate Truffle Cake",
+                flavor: "Dark Belgian Chocolate",
+                design: "Drip & Truffles",
+                img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=700&q=80",
+                sizes: [
+                    { label: "1 lb (6-8 servings)", price: 2000 },
+                    { label: "2 lb (12-15 servings)", price: 3600 },
+                    { label: "3 lb (20-24 servings)", price: 5000 }
+                ]
+            },
+            {
+                name: "Vintage Floral Meadow Cake",
+                flavor: "Vanilla Bean & Berry",
+                design: "Hand-Piped Floral",
+                img: "https://images.unsplash.com/photo-1562777717-dc6984f65a63?auto=format&fit=crop&w=700&q=80",
+                sizes: [
+                    { label: "1 lb (6-8 servings)", price: 2200 },
+                    { label: "2 lb (12-15 servings)", price: 3900 },
+                    { label: "3 lb (20-24 servings)", price: 5400 }
+                ]
+            },
+            {
+                name: "Classic Red Velvet Royale",
+                flavor: "Red Velvet & Cream Cheese",
+                design: "Minimal Velour",
+                img: "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?auto=format&fit=crop&w=700&q=80",
+                sizes: [
+                    { label: "1 lb (6-8 servings)", price: 2100 },
+                    { label: "2 lb (12-15 servings)", price: 3800 },
+                    { label: "3 lb (20-24 servings)", price: 5200 }
+                ]
+            }
+        ];
+
+        const availableFlavors = [
+            { name: "Madagascar Vanilla", desc: "Light, fluffy butter sponge infused with pure vanilla bean specks.", img: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?auto=format&fit=crop&w=500&q=80" },
+            { name: "Belgian Dark Chocolate", desc: "Deep, moist cocoa sponge made with 70% dark couverture chocolate.", img: "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?auto=format&fit=crop&w=500&q=80" },
+            { name: "Velvety Red Velvet", desc: "Classic buttermilk crimson sponge with a subtle hint of cocoa.", img: "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?auto=format&fit=crop&w=500&q=80" },
+            { name: "Fresh Lemon Zest", desc: "Bright, citrusy sponge baked with fresh lemon juice and zest.", img: "https://images.unsplash.com/photo-1519340333755-56e9c1d04579?auto=format&fit=crop&w=500&q=80" }
+        ];
+
+        const shapes = [
+            { id: "Round", icon: "fa-circle" },
+            { id: "Square", icon: "fa-square" },
+            { id: "Rectangle", icon: "fa-square" },
+            { id: "Heart", icon: "fa-heart" },
+            { id: "Hexagon", icon: "fa-stop" }
+        ];
+
+        const sizes = [
+            { id: "1 lb", serves: "Serves 6-8", price: 1800 },
+            { id: "2 lb", serves: "Serves 12-15", price: 3200 },
+            { id: "3 lb", serves: "Serves 20-24", price: 4500 }
+        ];
+
+        const sponges = [
+            { id: "Vanilla Bean", color: "#FFF5E4" },
+            { id: "Dark Chocolate", color: "#5C3A21" },
+            { id: "Red Velvet", color: "#A62C2B" },
+            { id: "Lemon Zest", color: "#FEF08A" }
+        ];
+
+        const frostings = [
+            { id: "Buttercream", border: "#F4C2C2", extra: 0 },
+            { id: "Whipped Cream", border: "#E2E8F0", extra: 0 },
+            { id: "Chocolate Ganache", border: "#3E2723", extra: 300 },
+            { id: "Cream Cheese", border: "#FDE68A", extra: 350 }
+        ];
+
+        const designs = [
+            { id: "Floral", extra: 300, img: "https://images.unsplash.com/photo-1562777717-dc6984f65a63?auto=format&fit=crop&w=500&q=80" },
+            { id: "Drip", extra: 250, img: "https://images.unsplash.com/photo-1535141192574-5d4897c12636?auto=format&fit=crop&w=500&q=80" },
+            { id: "Minimal", extra: 0, img: "https://images.unsplash.com/photo-1519340333755-56e9c1d04579?auto=format&fit=crop&w=500&q=80" },
+            { id: "Birthday", extra: 350, img: "https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?auto=format&fit=crop&w=500&q=80" },
+            { id: "Wedding", extra: 600, img: "https://images.unsplash.com/photo-1535254973040-607b474cb50d?auto=format&fit=crop&w=500&q=80" }
+        ];
+
+        let customCake = {
+            shape: "Round",
+            size: sizes[0],
+            sponge: sponges[0],
+            frosting: frostings[0],
+            design: designs[0],
+            note: "Happy Birthday!"
+        };
+
+        let activeOrder = null;
+
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+
+            document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
+            const activeNav = document.getElementById('nav-' + pageId);
+            if (activeNav) activeNav.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (pageId === 'order') renderOrderSummary();
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function renderMenu(category = 'All') {
+            const grid = document.getElementById('menu-grid');
+            const filtered = category === 'All' ? menuItems : menuItems.filter(i => i.category === category);
+            
+            grid.innerHTML = filtered.map(item => `
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-rose/15 flex flex-col hover:shadow-md transition">
+                    <div class="relative h-48 overflow-hidden bg-blush">
+                        <img src="${item.img}" onerror="this.onerror=null; this.src='${FALLBACK_IMG}';" alt="${item.name}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 left-3 bg-white/95 text-cocoa text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">${item.category}</span>
+                    </div>
+                    <div class="p-5 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-lg text-cocoa leading-snug">${item.name}</h3>
+                            <p class="text-xs text-cocoa/70 mt-1.5 line-clamp-2">${item.desc}</p>
+                        </div>
+                        <div class="pt-4 mt-4 border-t border-rose/10 flex items-center justify-between">
+                            <span class="font-serif font-bold text-lg text-rose">Rs. ${item.price.toLocaleString()}</span>
+                            <button onclick="orderDirectItem('${item.name}', ${item.price})" 
+                                    class="bg-blush hover:bg-rose hover:text-white text-rose text-xs font-bold px-4 py-2 rounded-full transition">
+                                Order Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterMenu(category, clickedBtn) {
+            document.querySelectorAll('.menu-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-rose', 'text-white');
+                btn.classList.add('bg-white', 'text-cocoa');
+            });
+            if (clickedBtn) {
+                clickedBtn.classList.remove('bg-white', 'text-cocoa');
+                clickedBtn.classList.add('bg-rose', 'text-white');
+            }
+            renderMenu(category);
+        }
+
+        function renderSignatureCakes() {
+            const grid = document.getElementById('signature-cakes-grid');
+            grid.innerHTML = signatureCakes.map((cake, idx) => `
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-rose/15 flex flex-col">
+                    <div class="h-60 overflow-hidden relative bg-blush">
+                        <img src="${cake.img}" onerror="this.onerror=null; this.src='${FALLBACK_IMG}';" alt="${cake.name}" class="w-full h-full object-cover">
+                        <span class="absolute bottom-3 left-3 bg-cocoa/85 text-white text-xs px-3 py-1 rounded-full">
+                            Design: ${cake.design}
+                        </span>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+                        <div>
+                            <span class="text-xs font-bold text-rose uppercase tracking-wider">Flavor: ${cake.flavor}</span>
+                            <h3 class="text-xl font-bold text-cocoa mt-0.5">${cake.name}</h3>
+                            
+                            <div class="mt-4 space-y-2">
+                                <p class="text-xs font-semibold text-cocoa/70">Select Size & Price:</p>
+                                ${cake.sizes.map((sz, sIdx) => `
+                                    <label class="flex items-center justify-between p-2.5 rounded-xl border border-rose/15 cursor-pointer hover:bg-blush/50 text-xs">
+                                        <span class="flex items-center gap-2 font-medium text-cocoa">
+                                            <input type="radio" name="cake-size-${idx}" ${sIdx === 0 ? 'checked' : ''} 
+                                                   onchange="updateCardPrice(${idx}, ${sz.price}, '${sz.label}')" class="accent-rose">
+                                            ${sz.label}
+                                        </span>
+                                        <span class="font-bold text-rose">Rs. ${sz.price.toLocaleString()}</span>
+                                    </label>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <button id="cake-btn-${idx}" onclick="orderDirectItem('${cake.name} (${cake.sizes[0].label})', ${cake.sizes[0].price})"
+                                class="w-full bg-rose hover:bg-roseDark text-white py-3 rounded-xl font-semibold text-sm transition shadow-sm">
+                            Order This Cake • Rs. ${cake.sizes[0].price.toLocaleString()}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('flavors-grid').innerHTML = availableFlavors.map(flv => `
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-rose/10 text-center">
+                    <img src="${flv.img}" onerror="this.onerror=null; this.src='${FALLBACK_IMG}';" alt="${flv.name}" class="w-full h-36 object-cover rounded-xl mb-3">
+                    <h4 class="font-bold text-base text-cocoa">${flv.name}</h4>
+                    <p class="text-xs text-cocoa/70 mt-1">${flv.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function updateCardPrice(cakeIdx, price, sizeLabel) {
+            const cake = signatureCakes[cakeIdx];
+            const btn = document.getElementById(`cake-btn-${cakeIdx}`);
+            btn.innerText = `Order This Cake • Rs. ${price.toLocaleString()}`;
+            btn.setAttribute('onclick', `orderDirectItem('${cake.name} (${sizeLabel})', ${price})`);
+        }
+
+        function initCustomizer() {
+            document.getElementById('shape-options').innerHTML = shapes.map(s => `
+                <button type="button" onclick="selectOption('shape', '${s.id}')"
+                        class="opt-shape p-3 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${customCake.shape === s.id ? 'border-rose bg-blush text-rose font-bold' : 'border-cocoa/15 hover:bg-cream'}">
+                    <i class="fa-solid ${s.icon} text-lg"></i>
+                    <span class="text-xs">${s.id}</span>
+                </button>
+            `).join('');
+
+            document.getElementById('size-options').innerHTML = sizes.map(s => `
+                <button type="button" onclick="selectOption('size', '${s.id}')"
+                        class="opt-size p-3.5 rounded-xl border text-left transition ${customCake.size.id === s.id ? 'border-rose bg-blush' : 'border-cocoa/15 hover:bg-cream'}">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-sm text-cocoa">${s.id}</span>
+                        <span class="text-xs font-bold text-rose">Rs. ${s.price.toLocaleString()}</span>
+                    </div>
+                    <span class="text-xs text-cocoa/60 block mt-0.5">${s.serves}</span>
+                </button>
+            `).join('');
+
+            document.getElementById('sponge-options').innerHTML = sponges.map(sp => `
+                <button type="button" onclick="selectOption('sponge', '${sp.id}')"
+                        class="opt-sponge p-3 rounded-xl border text-left transition flex items-center gap-2.5 ${customCake.sponge.id === sp.id ? 'border-rose bg-blush font-bold' : 'border-cocoa/15 hover:bg-cream'}">
+                    <span class="w-5 h-5 rounded-full border border-black/15 shrink-0" style="background-color:${sp.color}"></span>
+                    <span class="text-xs text-cocoa">${sp.id}</span>
+                </button>
+            `).join('');
+
+            document.getElementById('frosting-options').innerHTML = frostings.map(fr => `
+                <button type="button" onclick="selectOption('frosting', '${fr.id}')"
+                        class="opt-frosting p-3 rounded-xl border text-left transition ${customCake.frosting.id === fr.id ? 'border-rose bg-blush font-bold' : 'border-cocoa/15 hover:bg-cream'}">
+                    <span class="text-xs text-cocoa block">${fr.id}</span>
+                    <span class="text-[11px] text-rose font-semibold">${fr.extra > 0 ? '+Rs. ' + fr.extra : 'Included'}</span>
+                </button>
+            `).join('');
+
+            document.getElementById('design-options').innerHTML = designs.map(d => `
+                <button type="button" onclick="selectOption('design', '${d.id}')"
+                        class="opt-design rounded-xl border overflow-hidden text-center transition ${customCake.design.id === d.id ? 'border-2 border-rose ring-2 ring-rose/30' : 'border-cocoa/15 opacity-85 hover:opacity-100'}">
+                    <img src="${d.img}" onerror="this.onerror=null; this.src='${FALLBACK_IMG}';" alt="${d.id}" class="w-full h-16 object-cover">
+                    <div class="p-1.5 bg-white">
+                        <span class="text-xs font-bold text-cocoa block">${d.id}</span>
+                        <span class="text-[10px] text-rose">${d.extra > 0 ? '+Rs.' + d.extra : 'Included'}</span>
+                    </div>
+                </button>
+            `).join('');
+
+            updateLivePreview();
+        }
+
+        function selectOption(type, value) {
+            if (type === 'shape') customCake.shape = value;
+            if (type === 'size') customCake.size = sizes.find(s => s.id === value);
+            if (type === 'sponge') customCake.sponge = sponges.find(s => s.id === value);
+            if (type === 'frosting') customCake.frosting = frostings.find(f => f.id === value);
+            if (type === 'design') customCake.design = designs.find(d => d.id === value);
+            initCustomizer();
+        }
+
+        function updateCakeNote(val) {
+            customCake.note = val.trim() || "Happy Birthday!";
+            updateLivePreview();
+        }
+
+        function calculateCustomTotal() {
+            return customCake.size.price + customCake.frosting.extra + customCake.design.extra;
+        }
+
+        function updateLivePreview() {
+            const total = calculateCustomTotal();
+            const visual = document.getElementById('live-cake-visual');
+            const heartSvg = document.getElementById('heart-svg');
+            const heartPath = document.getElementById('heart-path');
+
+            visual.className = "w-36 h-36 flex items-center justify-center p-3 text-center shadow-md transition-all duration-300 border-4 relative";
+            heartSvg.classList.add('hidden');
+
+            if (customCake.shape === 'Heart') {
+                visual.classList.add('cake-shape-heart');
+                heartSvg.classList.remove('hidden');
+                heartPath.setAttribute('fill', customCake.sponge.color);
+                heartPath.setAttribute('stroke', customCake.frosting.border);
+            } else {
+                visual.classList.add('cake-shape-' + customCake.shape.toLowerCase());
+                visual.style.backgroundColor = customCake.sponge.color;
+                visual.style.borderColor = customCake.frosting.border;
+            }
+
+            const isDarkSponge = customCake.sponge.id === 'Dark Chocolate' || customCake.sponge.id === 'Red Velvet';
+            const textEl = document.getElementById('live-cake-text');
+            textEl.style.color = isDarkSponge ? '#FFFFFF' : '#3E2723';
+            textEl.innerText = customCake.note;
+
+            document.getElementById('live-design-img').src = customCake.design.img;
+            document.getElementById('live-design-caption').innerText = customCake.design.id + " Style";
+            document.getElementById('live-flavor-label').innerText = customCake.sponge.id + " Sponge";
+            document.getElementById('preview-badge').innerText = `${customCake.shape} • ${customCake.size.id}`;
+
+            document.getElementById('sum-shape-size').innerText = `${customCake.shape} • ${customCake.size.id} (${customCake.size.serves})`;
+            document.getElementById('sum-flavor').innerText = customCake.sponge.id;
+            document.getElementById('sum-frosting').innerText = customCake.frosting.id;
+            document.getElementById('sum-design').innerText = customCake.design.id;
+            document.getElementById('sum-note').innerText = `"${customCake.note}"`;
+            document.getElementById('sum-price').innerText = `Rs. ${total.toLocaleString()}`;
+        }
+
+        function proceedToOrderWithCustomCake() {
+            const total = calculateCustomTotal();
+            activeOrder = {
+                type: "Custom Designed Cake",
+                details: [
+                    { label: "Shape", val: customCake.shape },
+                    { label: "Size", val: `${customCake.size.id} (${customCake.size.serves})` },
+                    { label: "Sponge Flavor", val: customCake.sponge.id },
+                    { label: "Frosting & Filling", val: customCake.frosting.id },
+                    { label: "Design Style", val: customCake.design.id },
+                    { label: "Cake Message", val: `"${customCake.note}"` }
+                ],
+                total: total
+            };
+            navigateTo('order');
+        }
+
+        function orderDirectItem(itemName, price) {
+            activeOrder = {
+                type: "Bakery Menu / Signature Order",
+                details: [
+                    { label: "Selected Item", val: itemName },
+                    { label: "Quantity", val: "1" }
+                ],
+                total: price
+            };
+            navigateTo('order');
+        }
+
+        function renderOrderSummary() {
+            if (!activeOrder) {
+                const total = calculateCustomTotal();
+                activeOrder = {
+                    type: "Custom Designed Cake",
+                    details: [
+                        { label: "Shape", val: customCake.shape },
+                        { label: "Size", val: customCake.size.id },
+                        { label: "Sponge Flavor", val: customCake.sponge.id },
+                        { label: "Frosting & Filling", val: customCake.frosting.id },
+                        { label: "Design Style", val: customCake.design.id },
+                        { label: "Cake Message", val: `"${customCake.note}"` }
+                    ],
+                    total: total
+                };
+            }
+
+            const box = document.getElementById('order-summary-box');
+            box.innerHTML = `
+                <p class="font-bold text-rose text-xs uppercase tracking-wider mb-2">${activeOrder.type}</p>
+                ${activeOrder.details.map(d => `
+                    <div class="flex justify-between">
+                        <span class="text-cocoa/70">${d.label}:</span>
+                        <span class="font-semibold text-right">${d.val}</span>
+                    </div>
+                `).join('')}
+            `;
+            document.getElementById('order-total-display').innerText = `Rs. ${activeOrder.total.toLocaleString()}`;
+        }
+
+        function sendOrderOnWhatsApp(e) {
+            e.preventDefault();
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            const date = document.getElementById('cust-date').value;
+            const address = document.getElementById('cust-address').value;
+
+            let cakeLines = activeOrder.details.map(d => `• *${d.label}:* ${d.val}`).join('%0A');
+
+            const message = `*NEW ORDER - CRUMB & CREAM BAKERY*%0A%0A` +
+                            `*Customer Details:*%0A` +
+                            `• *Name:* ${name}%0A` +
+                            `• *Phone:* ${phone}%0A` +
+                            `• *Delivery Date:* ${date}%0A` +
+                            `• *Address:* ${address}%0A%0A` +
+                            `*Order Details (${activeOrder.type}):*%0A` +
+                            `${cakeLines}%0A%0A` +
+                            `*Total Amount:* Rs. ${activeOrder.total.toLocaleString()}`;
+
+            const bakeryWhatsApp = "923001234567";
+            window.open(`https://wa.me/${bakeryWhatsApp}?text=${message}`, '_blank');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderMenu('All');
+            renderSignatureCakes();
+            initCustomizer();
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('cust-date').min = tomorrow.toISOString().split('T')[0];
+        });
+    </script>
+</body>
+</html>
