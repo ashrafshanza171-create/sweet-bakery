@@ -6,7 +6,7 @@
     <title>Crumb & Cream | Artisan Home Bakery</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -22,6 +22,7 @@
                     fontFamily: {
                         serif: ['"Playfair Display"', 'serif'],
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        script: ['"Great Vibes"', 'cursive'],
                     }
                 }
             }
@@ -30,6 +31,7 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FFFDF9; color: #3E2723; }
         h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        .font-script { font-family: 'Great Vibes', cursive; }
         .page-section { display: none; animation: fadeIn 0.35s ease-in-out; }
         .page-section.active { display: block; }
         @keyframes fadeIn {
@@ -37,17 +39,54 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .nav-link.active { color: #D86C88; font-weight: 700; border-bottom: 2px solid #D86C88; }
-        
-        .cake-shape-round { border-radius: 9999px; }
-        .cake-shape-square { border-radius: 16px; }
-        .cake-shape-rectangle { border-radius: 16px; width: 250px !important; height: 165px !important; }
-        .cake-shape-hexagon { clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%); border-radius: 0; }
-        .cake-shape-heart {
-            position: relative;
-            background: transparent !important;
-            box-shadow: none !important;
-            border: none !important;
+
+        /* Game-Style Live Cake Studio Animations */
+        #cake-scale-group {
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            transform-origin: 210px 210px;
         }
+        @keyframes gameDrop {
+            0% { opacity: 0; transform: translateY(-42px) scale(0.45); }
+            65% { opacity: 1; transform: translateY(3px) scale(1.14); }
+            85% { transform: translateY(-2px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .topping-pop {
+            animation: gameDrop 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+        @keyframes sparkleBurst {
+            0% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+            45% { opacity: 1; transform: scale(1.15) rotate(25deg); }
+            100% { opacity: 0; transform: scale(0.4) rotate(60deg); }
+        }
+        .sparkle-anim {
+            animation: sparkleBurst 0.7s ease-out forwards;
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+        @keyframes flicker {
+            0%, 100% { transform: scale(1) skewX(0deg); opacity: 0.95; }
+            25% { transform: scale(1.08, 0.95) skewX(-3deg); opacity: 1; }
+            50% { transform: scale(0.95, 1.07) skewX(3deg); opacity: 0.9; }
+            75% { transform: scale(1.04, 0.98) skewX(-2deg); opacity: 1; }
+        }
+        .candle-flame {
+            animation: flicker 0.9s infinite ease-in-out;
+            transform-box: fill-box;
+            transform-origin: bottom center;
+        }
+        @keyframes dripSlide {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .drip-anim {
+            animation: dripSlide 0.38s ease-out forwards;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #FCEEF2; border-radius: 9999px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #D86C88; border-radius: 9999px; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -281,28 +320,31 @@
         </section>
 
 
-        <!-- ==================== 4. CUSTOMIZE YOUR CAKE ==================== -->
+        <!-- ==================== 4. CUSTOMIZE YOUR CAKE (GAME-STYLE INTERACTIVE STUDIO) ==================== -->
         <section id="page-customize" class="page-section py-10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-2xl mx-auto mb-10">
                     <span class="bg-blush text-rose px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Interactive Cake Studio</span>
                     <h2 class="text-3xl sm:text-4xl font-bold text-cocoa mt-2">Design Your Custom Cake</h2>
-                    <p class="text-cocoa/70 mt-1">Customize every layer step by step and watch your cake preview & price update live.</p>
+                    <p class="text-cocoa/70 mt-1">Build your dream cake step by step—tap any frosting, drip, or topping and watch it drop onto your cake live!</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                     
-                    <!-- LEFT COLUMN: BUILDER -->
-                    <div class="lg:col-span-7 space-y-6">
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose/15">
+                    <!-- LEFT COLUMN: STEP-BY-STEP BUILDER -->
+                    <div class="lg:col-span-7 space-y-5 order-2 lg:order-1">
+
+                        <!-- Step 1: Shape -->
+                        <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-rose/15">
                             <h3 class="text-lg font-bold text-cocoa mb-3 flex items-center gap-2">
                                 <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">1</span>
                                 Choose Cake Shape
                             </h3>
-                            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="shape-options"></div>
+                            <div class="grid grid-cols-3 sm:grid-cols-5 gap-2.5" id="shape-options"></div>
                         </div>
 
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose/15">
+                        <!-- Step 2: Size / Weight -->
+                        <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-rose/15">
                             <h3 class="text-lg font-bold text-cocoa mb-3 flex items-center gap-2">
                                 <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">2</span>
                                 Choose Size & Weight
@@ -310,110 +352,216 @@
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="size-options"></div>
                         </div>
 
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose/15">
-                            <h3 class="text-lg font-bold text-cocoa mb-3 flex items-center gap-2">
-                                <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">3</span>
-                                Choose Sponge Flavor
-                            </h3>
+                        <!-- Step 3: Sponge Flavor -->
+                        <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-rose/15">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="text-lg font-bold text-cocoa flex items-center gap-2">
+                                    <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">3</span>
+                                    Choose Sponge Flavor
+                                </h3>
+                                <span class="text-[11px] text-cocoa/60 font-medium">Shown on slice cutaway</span>
+                            </div>
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="sponge-options"></div>
                         </div>
 
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose/15">
+                        <!-- Step 4: Cream / Frosting Type -->
+                        <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-rose/15">
                             <h3 class="text-lg font-bold text-cocoa mb-3 flex items-center gap-2">
                                 <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">4</span>
-                                Choose Frosting & Filling
+                                Choose Cream / Frosting Type
                             </h3>
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="frosting-options"></div>
                         </div>
 
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose/15">
-                            <h3 class="text-lg font-bold text-cocoa mb-3 flex items-center gap-2">
-                                <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">5</span>
-                                Choose Design Style
-                            </h3>
-                            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="design-options"></div>
+                        <!-- Step 5: Frosting Color -->
+                        <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-rose/15">
+                            <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+                                <h3 class="text-lg font-bold text-cocoa flex items-center gap-2">
+                                    <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">5</span>
+                                    Choose Frosting Color
+                                </h3>
+                                <span id="selected-color-label" class="text-xs font-semibold text-rose bg-blush px-2.5 py-1 rounded-full">Blush Pink</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-3" id="frosting-color-options"></div>
                         </div>
 
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-rose/15">
+                        <!-- Step 6: Drip Style -->
+                        <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-rose/15">
                             <h3 class="text-lg font-bold text-cocoa mb-3 flex items-center gap-2">
                                 <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">6</span>
-                                Add a Note on the Cake
+                                Choose Glaze / Drip
                             </h3>
-                            <input type="text" id="cake-note-input" maxlength="35" oninput="updateCakeNote(this.value)"
-                                   placeholder='e.g. "Happy Birthday Ali"' 
-                                   class="w-full px-4 py-3 rounded-xl border border-cocoa/20 focus:outline-none focus:border-rose bg-cream" value="Happy Birthday!">
+                            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5" id="drip-options"></div>
+                        </div>
+
+                        <!-- Step 7: Toppings (Game-Style Multi Selectable) -->
+                        <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-rose/15">
+                            <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+                                <h3 class="text-lg font-bold text-cocoa flex items-center gap-2">
+                                    <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">7</span>
+                                    Decorate With Toppings
+                                </h3>
+                                <div class="flex items-center gap-2">
+                                    <span id="toppings-count-badge" class="text-xs font-semibold text-rose bg-blush px-2.5 py-1 rounded-full">0 selected</span>
+                                    <button type="button" onclick="clearAllToppings()" class="text-xs text-cocoa/60 hover:text-rose underline">Clear All</button>
+                                </div>
+                            </div>
+                            <p class="text-xs text-cocoa/65 mb-3">Tap toppings to drop them onto your cake—tap again to remove.</p>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5" id="topping-options"></div>
+                        </div>
+
+                        <!-- Step 8: Cake Caption / Message -->
+                        <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-rose/15 space-y-3">
+                            <h3 class="text-lg font-bold text-cocoa flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-rose text-white text-xs flex items-center justify-center font-sans">8</span>
+                                Cake Caption / Message
+                            </h3>
+                            <input type="text" id="cake-note-input" maxlength="32" oninput="updateCakeNote(this.value)"
+                                   placeholder='e.g. "Happy Birthday Ali!" (leave blank for none)' 
+                                   class="w-full px-4 py-3 rounded-xl border border-cocoa/20 focus:outline-none focus:border-rose bg-cream text-sm" value="Happy Birthday!">
+
+                            <!-- Quick Presets -->
+                            <div class="flex flex-wrap gap-1.5" id="caption-presets">
+                                <button type="button" onclick="applyCaptionPreset('Happy Birthday!')" class="text-xs bg-blush/80 hover:bg-rose hover:text-white text-cocoa px-3 py-1 rounded-full transition">Happy Birthday!</button>
+                                <button type="button" onclick="applyCaptionPreset('Happy Anniversary!')" class="text-xs bg-blush/80 hover:bg-rose hover:text-white text-cocoa px-3 py-1 rounded-full transition">Happy Anniversary!</button>
+                                <button type="button" onclick="applyCaptionPreset('Congratulations!')" class="text-xs bg-blush/80 hover:bg-rose hover:text-white text-cocoa px-3 py-1 rounded-full transition">Congratulations!</button>
+                                <button type="button" onclick="applyCaptionPreset('Best Wishes!')" class="text-xs bg-blush/80 hover:bg-rose hover:text-white text-cocoa px-3 py-1 rounded-full transition">Best Wishes!</button>
+                                <button type="button" onclick="applyCaptionPreset('')" class="text-xs bg-cream border border-cocoa/15 hover:bg-blush text-cocoa/70 px-3 py-1 rounded-full transition">No Text</button>
+                            </div>
+
+                            <!-- Text Font & Color -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-rose/10">
+                                <div>
+                                    <span class="text-[11px] font-bold uppercase tracking-wider text-cocoa/60 block mb-1.5">Lettering Style</span>
+                                    <div class="flex gap-1.5" id="caption-font-options"></div>
+                                </div>
+                                <div>
+                                    <span class="text-[11px] font-bold uppercase tracking-wider text-cocoa/60 block mb-1.5">Icing Text Color</span>
+                                    <div class="flex items-center gap-2" id="caption-color-options"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- RIGHT COLUMN: LIVE PREVIEW -->
-                    <div class="lg:col-span-5 lg:sticky lg:top-24 space-y-5">
-                        <div class="bg-white rounded-3xl p-6 shadow-lg border border-rose/20">
-                            <div class="flex justify-between items-center mb-4">
+                    <!-- RIGHT COLUMN: LIVE LAYERED SVG PREVIEW & SUMMARY -->
+                    <div class="lg:col-span-5 lg:sticky lg:top-24 space-y-5 order-1 lg:order-2">
+                        <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-lg border border-rose/20">
+                            <div class="flex justify-between items-center mb-3">
                                 <span class="text-xs font-bold uppercase tracking-wider text-rose flex items-center gap-1.5">
-                                    <span class="w-2 h-2 rounded-full bg-rose animate-ping"></span> Live Cake Preview
+                                    <span class="w-2 h-2 rounded-full bg-rose animate-ping"></span> Live Cake Kitchen
                                 </span>
-                                <span id="preview-badge" class="text-xs bg-blush text-cocoa font-semibold px-3 py-1 rounded-full">
-                                    Round • 1 lb
-                                </span>
-                            </div>
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-blush/50 p-4 rounded-2xl border border-rose/10 mb-5">
-                                <div class="flex flex-col items-center justify-center bg-white rounded-xl p-4 min-h-[210px] shadow-inner relative overflow-hidden">
-                                    <span class="text-[10px] uppercase tracking-wider text-cocoa/50 font-bold absolute top-2 left-3">Top View</span>
-                                    <div id="live-cake-visual" class="w-36 h-36 cake-shape-round flex items-center justify-center p-3 text-center shadow-md transition-all duration-300 border-4"
-                                         style="background-color: #FFF5E4; border-color: #E6C29F;">
-                                        <svg id="heart-svg" class="hidden w-36 h-36 drop-shadow-md" viewBox="0 0 100 100">
-                                            <path id="heart-path" d="M50 88 C20 65, 5 45, 5 28 C5 14, 16 5, 29 5 C38 5, 46 10, 50 18 C54 10, 62 5, 71 5 C84 5, 95 14, 95 28 C95 45, 80 65, 50 88 Z" 
-                                                  fill="#FFF5E4" stroke="#E6C29F" stroke-width="4"/>
-                                        </svg>
-                                        <span id="live-cake-text" class="font-serif italic text-xs font-bold text-cocoa z-10 break-words max-w-[110px]">
-                                            Happy Birthday!
-                                        </span>
-                                    </div>
-                                    <span id="live-flavor-label" class="text-[11px] font-medium text-cocoa/70 mt-2">Vanilla Sponge</span>
-                                </div>
-
-                                <div class="flex flex-col justify-between bg-white rounded-xl p-2 shadow-inner relative overflow-hidden">
-                                    <span class="text-[10px] uppercase tracking-wider bg-white/90 px-2 py-0.5 rounded text-cocoa font-bold absolute top-3 left-3 z-10 shadow-sm">
-                                        Style Inspiration
+                                <div class="flex items-center gap-2">
+                                    <span id="preview-badge" class="text-xs bg-blush text-cocoa font-semibold px-3 py-1 rounded-full">
+                                        Round • 1 lb
                                     </span>
-                                    <img id="live-design-img" src="https://images.unsplash.com/photo-1562777717-dc6984f65a63?auto=format&fit=crop&w=500&q=80" 
-                                         onerror="this.src='https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=500&q=80'"
-                                         alt="Cake Design Preview" class="w-full h-44 object-cover rounded-lg transition-all duration-300">
-                                    <p id="live-design-caption" class="text-center text-xs font-semibold text-cocoa py-1.5">Floral Style</p>
+                                    <button type="button" onclick="resetCustomizer()" title="Reset Design" class="text-xs text-cocoa/50 hover:text-rose p-1.5 rounded-full hover:bg-blush transition">
+                                        <i class="fa-solid fa-rotate-left"></i>
+                                    </button>
                                 </div>
                             </div>
 
-                            <div class="space-y-2 text-sm border-t border-b border-rose/15 py-4 mb-5">
-                                <div class="flex justify-between">
+                            <!-- SVG Cake Stage -->
+                            <div class="relative rounded-2xl bg-gradient-to-b from-blush/55 via-cream to-blush/75 border border-rose/15 overflow-hidden mb-4">
+                                <svg id="live-cake-svg" viewBox="0 0 420 350" class="w-full h-auto select-none block" role="img" aria-label="Live custom cake preview">
+                                    <defs>
+                                        <linearGradient id="gloss-grad" x1="0" y1="0" x2="1" y2="1">
+                                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.48"/>
+                                            <stop offset="45%" stop-color="#ffffff" stop-opacity="0.06"/>
+                                            <stop offset="100%" stop-color="#000000" stop-opacity="0.08"/>
+                                        </linearGradient>
+                                        <radialGradient id="board-shadow" cx="50%" cy="50%" r="50%">
+                                            <stop offset="0%" stop-color="#3E2723" stop-opacity="0.24"/>
+                                            <stop offset="70%" stop-color="#3E2723" stop-opacity="0.08"/>
+                                            <stop offset="100%" stop-color="#3E2723" stop-opacity="0"/>
+                                        </radialGradient>
+                                        <pattern id="sponge-texture" width="8" height="8" patternUnits="userSpaceOnUse">
+                                            <circle cx="2" cy="2" r="0.8" fill="#000000" fill-opacity="0.09"/>
+                                            <circle cx="6" cy="5" r="0.6" fill="#ffffff" fill-opacity="0.14"/>
+                                            <circle cx="4" cy="7" r="0.5" fill="#000000" fill-opacity="0.07"/>
+                                        </pattern>
+                                    </defs>
+
+                                    <!-- Pedestal / Stage Shadow -->
+                                    <ellipse cx="210" cy="288" rx="160" ry="38" fill="url(#board-shadow)"/>
+
+                                    <!-- Scaled Cake Group -->
+                                    <g id="cake-scale-group">
+                                        <g id="layer-board"></g>
+                                        <g id="layer-cake-body"></g>
+                                        <g id="layer-frosting-finish"></g>
+                                        <g id="layer-drip"></g>
+                                        <g id="layer-piped-border"></g>
+                                        <g id="layer-toppings"></g>
+                                        <g id="layer-caption"></g>
+                                    </g>
+
+                                    <!-- Sparkle Burst Layer -->
+                                    <g id="layer-sparkles"></g>
+                                </svg>
+
+                                <!-- Floating Inside Sponge & Filling Cutaway Slice Badge -->
+                                <div class="absolute bottom-2.5 left-2.5 bg-white/95 backdrop-blur-sm rounded-xl p-2 shadow-md border border-rose/15 flex items-center gap-2.5">
+                                    <svg width="46" height="42" viewBox="0 0 56 50" class="shrink-0" aria-hidden="true">
+                                        <polygon points="6,14 48,6 50,42 8,46" fill="#fff" stroke="#3E2723" stroke-opacity="0.12" stroke-width="1"/>
+                                        <polygon id="slice-frosting-top" points="4,12 48,4 50,10 6,18" fill="#FADADD"/>
+                                        <polygon id="slice-sponge-1" points="6,18 50,10 50,18 6,26" fill="#FFF1D6"/>
+                                        <polygon points="6,18 50,10 50,18 6,26" fill="url(#sponge-texture)"/>
+                                        <polygon id="slice-filling-1" points="6,26 50,18 50,23 6,31" fill="#FADADD"/>
+                                        <polygon id="slice-sponge-2" points="6,31 50,23 50,31 6,39" fill="#FFF1D6"/>
+                                        <polygon points="6,31 50,23 50,31 6,39" fill="url(#sponge-texture)"/>
+                                        <polygon id="slice-filling-2" points="6,39 50,31 50,35 6,43" fill="#FADADD"/>
+                                        <polygon id="slice-sponge-3" points="6,43 50,35 50,42 8,46" fill="#FFF1D6"/>
+                                        <polygon points="6,43 50,35 50,42 8,46" fill="url(#sponge-texture)"/>
+                                    </svg>
+                                    <div class="pr-1">
+                                        <span class="text-[9px] font-bold uppercase tracking-wider text-rose block leading-tight">Inside Layers</span>
+                                        <span id="slice-sponge-label" class="text-[11px] font-bold text-cocoa block leading-tight">Vanilla Sponge</span>
+                                        <span id="slice-frosting-label" class="text-[10px] text-cocoa/65 block leading-tight">Buttercream</span>
+                                    </div>
+                                </div>
+
+                                <!-- Size Proportion Indicator -->
+                                <div class="absolute top-2.5 right-2.5 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-[10px] font-bold text-cocoa/80 border border-rose/10 shadow-sm">
+                                    <span id="preview-serves-badge">Serves 6-8</span>
+                                </div>
+                            </div>
+
+                            <!-- Live Summary Breakdown -->
+                            <div class="space-y-2 text-xs sm:text-sm border-t border-b border-rose/15 py-3.5 mb-4 max-h-56 overflow-y-auto custom-scrollbar pr-1">
+                                <div class="flex justify-between gap-2">
                                     <span class="text-cocoa/70">Shape & Size:</span>
-                                    <span id="sum-shape-size" class="font-semibold text-cocoa">Round • 1 lb</span>
+                                    <span id="sum-shape-size" class="font-semibold text-cocoa text-right">Round • 1 lb (Serves 6-8)</span>
                                 </div>
-                                <div class="flex justify-between">
+                                <div class="flex justify-between gap-2">
                                     <span class="text-cocoa/70">Sponge Flavor:</span>
-                                    <span id="sum-flavor" class="font-semibold text-cocoa">Vanilla Bean</span>
+                                    <span id="sum-flavor" class="font-semibold text-cocoa text-right">Vanilla</span>
                                 </div>
-                                <div class="flex justify-between">
-                                    <span class="text-cocoa/70">Frosting & Filling:</span>
-                                    <span id="sum-frosting" class="font-semibold text-cocoa">Buttercream</span>
+                                <div class="flex justify-between gap-2">
+                                    <span class="text-cocoa/70">Frosting & Color:</span>
+                                    <span id="sum-frosting" class="font-semibold text-cocoa text-right flex items-center justify-end gap-1.5">Buttercream • Blush Pink</span>
                                 </div>
-                                <div class="flex justify-between">
-                                    <span class="text-cocoa/70">Design Idea:</span>
-                                    <span id="sum-design" class="font-semibold text-cocoa">Floral</span>
+                                <div class="flex justify-between gap-2">
+                                    <span class="text-cocoa/70">Glaze / Drip:</span>
+                                    <span id="sum-drip" class="font-semibold text-cocoa text-right">No Drip</span>
                                 </div>
-                                <div class="flex justify-between">
+                                <div class="flex justify-between gap-2">
+                                    <span class="text-cocoa/70 shrink-0">Toppings:</span>
+                                    <span id="sum-toppings" class="font-semibold text-cocoa text-right">None</span>
+                                </div>
+                                <div class="flex justify-between gap-2">
                                     <span class="text-cocoa/70">Cake Message:</span>
-                                    <span id="sum-note" class="font-semibold text-rose italic">"Happy Birthday!"</span>
+                                    <span id="sum-note" class="font-semibold text-rose italic text-right">"Happy Birthday!"</span>
                                 </div>
                             </div>
 
-                            <div class="flex items-center justify-between mb-5">
+                            <!-- Live Total Price & CTA -->
+                            <div class="flex items-center justify-between gap-3">
                                 <div>
                                     <span class="text-xs text-cocoa/60 block">Estimated Total</span>
-                                    <span id="sum-price" class="text-3xl font-serif font-bold text-cocoa">Rs. 1,800</span>
+                                    <span id="sum-price" class="text-2xl sm:text-3xl font-serif font-bold text-cocoa">Rs. 1,800</span>
                                 </div>
                                 <button onclick="proceedToOrderWithCustomCake()" 
-                                        class="bg-rose hover:bg-roseDark text-white px-6 py-3.5 rounded-full font-semibold shadow-md transition flex items-center gap-2">
+                                        class="bg-rose hover:bg-roseDark text-white px-5 sm:px-6 py-3.5 rounded-full font-semibold shadow-md transition flex items-center gap-2 text-sm sm:text-base">
                                     Proceed to Order <i class="fa-solid fa-arrow-right"></i>
                                 </button>
                             </div>
@@ -523,6 +671,7 @@
     <script>
         const FALLBACK_IMG = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80";
 
+        // EXPANDED MENU (16 ITEMS)
         const menuItems = [
             { 
                 name: "Belgian Chocolate Truffle Cake", 
@@ -532,32 +681,32 @@
                 img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80" 
             },
             { 
-                name: "Red Velvet Cream Cheese Cupcakes", 
-                category: "Cupcakes", 
-                price: 1200, 
-                desc: "Velvety cocoa cupcakes topped with tangy Madagascar vanilla cream cheese.", 
-                img: "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?auto=format&fit=crop&w=600&q=80" 
-            },
-            { 
-                name: "Fudgy Walnut Brownies (Box)", 
-                category: "Brownies", 
-                price: 1100, 
-                desc: "Crinkly-top dark chocolate brownies loaded with roasted walnuts.", 
-                img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80" 
-            },
-            { 
-                name: "Strawberry Mille-Feuille Pastry", 
-                category: "Pastries", 
-                price: 450, 
-                desc: "Flaky puff pastry layers with diplomat vanilla cream & fresh berries.", 
-                img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80" 
-            },
-            { 
                 name: "Salted Caramel Drip Cake", 
                 category: "Cakes", 
                 price: 2400, 
                 desc: "Brown sugar sponge with house-made salted caramel & Swiss meringue.", 
                 img: "https://images.unsplash.com/photo-1535141192574-5d4897c12636?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Strawberry Shortcake Royale", 
+                category: "Cakes", 
+                price: 2300, 
+                desc: "Light vanilla sponge layered with fresh whipped cream & juicy strawberries.", 
+                img: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Lotus Biscoff Crunch Cake", 
+                category: "Cakes", 
+                price: 2500, 
+                desc: "Caramelized biscuit sponge frosted with creamy Biscoff buttercream & crumbs.", 
+                img: "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Red Velvet Cream Cheese Cupcakes", 
+                category: "Cupcakes", 
+                price: 1200, 
+                desc: "Velvety cocoa cupcakes topped with tangy Madagascar vanilla cream cheese.", 
+                img: "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?auto=format&fit=crop&w=600&q=80" 
             },
             { 
                 name: "Nutella Hazelnut Cupcakes", 
@@ -567,6 +716,27 @@
                 img: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=600&q=80" 
             },
             { 
+                name: "Vanilla Berry Swirl Cupcakes (Box of 6)", 
+                category: "Cupcakes", 
+                price: 1150, 
+                desc: "Fluffy butter vanilla cupcakes crowned with rose-pink berry buttercream.", 
+                img: "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Oreo Cookies & Cream Cupcakes", 
+                category: "Cupcakes", 
+                price: 1250, 
+                desc: "Dark cocoa sponge topped with Oreo-flecked frosting & a mini cookie.", 
+                img: "https://images.unsplash.com/photo-1550617931-e17a7b70dce2?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Strawberry Mille-Feuille Pastry", 
+                category: "Pastries", 
+                price: 450, 
+                desc: "Flaky puff pastry layers with diplomat vanilla cream & fresh berries.", 
+                img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
                 name: "Lotus Biscoff Tres Leches", 
                 category: "Pastries", 
                 price: 550, 
@@ -574,11 +744,46 @@
                 img: "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=600&q=80" 
             },
             { 
+                name: "Classic French Fruit Tart", 
+                category: "Pastries", 
+                price: 500, 
+                desc: "Crisp almond shortcrust shell filled with silky custard & glazed fruits.", 
+                img: "https://images.unsplash.com/photo-1519915028121-7d3463d20b13?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Chocolate Eclair Duo", 
+                category: "Pastries", 
+                price: 480, 
+                desc: "Choux pastry piped with vanilla bean custard & dipped in dark chocolate.", 
+                img: "https://images.unsplash.com/photo-1612203985729-70726954388c?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Fudgy Walnut Brownies (Box)", 
+                category: "Brownies", 
+                price: 1100, 
+                desc: "Crinkly-top dark chocolate brownies loaded with roasted walnuts.", 
+                img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
                 name: "Triple Chocolate Chunk Brownies", 
                 category: "Brownies", 
                 price: 1150, 
                 desc: "Infused with milk, dark, and white chocolate chunks.", 
                 img: "https://images.unsplash.com/photo-1564355808539-22fda35bed7e?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Salted Caramel Swirl Brownies", 
+                category: "Brownies", 
+                price: 1200, 
+                desc: "Gooey cocoa fudge brownies marbled with rich sea-salted caramel.", 
+                img: "https://images.unsplash.com/photo-1589375025852-a66cdd127efb?auto=format&fit=crop&w=600&q=80" 
+            },
+            { 
+                name: "Nutella Stuffed Brookies (Box of 6)", 
+                category: "Brownies", 
+                price: 1300, 
+                desc: "Half fudgy brownie, half chocolate-chip cookie with a Nutella center.", 
+                img: "https://images.unsplash.com/photo-1461009312844-e80697a81cc7?auto=format&fit=crop&w=600&q=80" 
             }
         ];
 
@@ -625,40 +830,78 @@
             { name: "Fresh Lemon Zest", desc: "Bright, citrusy sponge baked with fresh lemon juice and zest.", img: "https://images.unsplash.com/photo-1519340333755-56e9c1d04579?auto=format&fit=crop&w=500&q=80" }
         ];
 
+        // ==================== CUSTOMIZER CONFIGURATION ====================
         const shapes = [
             { id: "Round", icon: "fa-circle" },
             { id: "Square", icon: "fa-square" },
             { id: "Rectangle", icon: "fa-square" },
             { id: "Heart", icon: "fa-heart" },
-            { id: "Hexagon", icon: "fa-stop" }
+            { id: "Hexagon", icon: "fa-dice-d6" }
         ];
 
         const sizes = [
-            { id: "1 lb", serves: "Serves 6-8", price: 1800 },
-            { id: "2 lb", serves: "Serves 12-15", price: 3200 },
-            { id: "3 lb", serves: "Serves 20-24", price: 4500 }
+            { id: "1 lb", serves: "Serves 6-8", price: 1800, scale: 0.88 },
+            { id: "2 lb", serves: "Serves 12-15", price: 3200, scale: 1.00 },
+            { id: "3 lb", serves: "Serves 20-24", price: 4500, scale: 1.11 }
         ];
 
         const sponges = [
-            { id: "Vanilla Bean", color: "#FFF5E4" },
-            { id: "Dark Chocolate", color: "#5C3A21" },
-            { id: "Red Velvet", color: "#A62C2B" },
-            { id: "Lemon Zest", color: "#FEF08A" }
+            { id: "Vanilla", color: "#F7E3B5", desc: "Soft butter vanilla" },
+            { id: "Chocolate", color: "#5A3320", desc: "Rich Belgian cocoa" },
+            { id: "Red Velvet", color: "#A3262A", desc: "Crimson buttermilk" },
+            { id: "Lemon", color: "#F9E076", desc: "Zesty citrus sponge" }
         ];
 
         const frostings = [
-            { id: "Buttercream", border: "#F4C2C2", extra: 0 },
-            { id: "Whipped Cream", border: "#E2E8F0", extra: 0 },
-            { id: "Chocolate Ganache", border: "#3E2723", extra: 300 },
-            { id: "Cream Cheese", border: "#FDE68A", extra: 350 }
+            { id: "Buttercream", extra: 0, finish: "Piped satin finish" },
+            { id: "Whipped Cream", extra: 0, finish: "Light fluffy clouds" },
+            { id: "Chocolate Ganache", extra: 300, finish: "Glossy mirror glaze" },
+            { id: "Cream Cheese", extra: 350, finish: "Velvety tangy swirl" }
         ];
 
-        const designs = [
-            { id: "Floral", extra: 300, img: "https://images.unsplash.com/photo-1562777717-dc6984f65a63?auto=format&fit=crop&w=500&q=80" },
-            { id: "Drip", extra: 250, img: "https://images.unsplash.com/photo-1535141192574-5d4897c12636?auto=format&fit=crop&w=500&q=80" },
-            { id: "Minimal", extra: 0, img: "https://images.unsplash.com/photo-1519340333755-56e9c1d04579?auto=format&fit=crop&w=500&q=80" },
-            { id: "Birthday", extra: 350, img: "https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?auto=format&fit=crop&w=500&q=80" },
-            { id: "Wedding", extra: 600, img: "https://images.unsplash.com/photo-1535254973040-607b474cb50d?auto=format&fit=crop&w=500&q=80" }
+        const frostingColors = [
+            { name: "Classic White", hex: "#FFFDF8" },
+            { name: "Blush Pink", hex: "#F7C5D0" },
+            { name: "Baby Blue", hex: "#BFE0F5" },
+            { name: "Lavender", hex: "#D7C4F0" },
+            { name: "Chocolate", hex: "#543322" },
+            { name: "Warm Peach", hex: "#FAD1B4" }
+        ];
+
+        const drips = [
+            { id: "No Drip", color: null, extra: 0 },
+            { id: "Chocolate Drip", color: "#3B1E12", extra: 250 },
+            { id: "Caramel Drip", color: "#C87D32", extra: 250 },
+            { id: "Berry Drip", color: "#D6336C", extra: 250 },
+            { id: "White Drip", color: "#FFF8EC", extra: 250 }
+        ];
+
+        const toppingsList = [
+            { id: "Strawberries", label: "Strawberries", emoji: "🍓", price: 250 },
+            { id: "Cherries", label: "Cherries", emoji: "🍒", price: 200 },
+            { id: "Blueberries", label: "Blueberries", emoji: "🫐", price: 250 },
+            { id: "Oreo cookies", label: "Oreo Cookies", emoji: "🍪", price: 200 },
+            { id: "Chocolate chips", label: "Choco Chips", emoji: "🍫", price: 150 },
+            { id: "Rainbow sprinkles", label: "Sprinkles", emoji: "✨", price: 150 },
+            { id: "Macarons", label: "Macarons", emoji: "🩷", price: 350 },
+            { id: "Candy", label: "Candy Gems", emoji: "🍬", price: 150 },
+            { id: "Edible flowers", label: "Edible Flowers", emoji: "🌸", price: 300 },
+            { id: "Birthday candles", label: "Candles", emoji: "🕯️", price: 150 },
+            { id: "Cake topper", label: "Cake Topper", emoji: "👑", price: 300 }
+        ];
+
+        const captionFonts = [
+            { id: "serif", label: "Classic", css: "'Playfair Display', serif", italic: true },
+            { id: "script", label: "Script", css: "'Great Vibes', cursive", italic: false },
+            { id: "sans", label: "Modern", css: "'Plus Jakarta Sans', sans-serif", italic: false }
+        ];
+
+        const captionColors = [
+            { name: "Cocoa", hex: "#3E2723" },
+            { name: "Rose", hex: "#B84D69" },
+            { name: "Gold", hex: "#B8860B" },
+            { name: "White", hex: "#FFFFFF" },
+            { name: "Navy", hex: "#1E3A5F" }
         ];
 
         let customCake = {
@@ -666,12 +909,19 @@
             size: sizes[0],
             sponge: sponges[0],
             frosting: frostings[0],
-            design: designs[0],
-            note: "Happy Birthday!"
+            frostingColorName: "Blush Pink",
+            frostingColor: "#F7C5D0",
+            isCustomColor: false,
+            drip: drips[1],
+            toppings: ["Strawberries", "Rainbow sprinkles"],
+            note: "Happy Birthday!",
+            captionFont: captionFonts[0],
+            captionColor: captionColors[0]
         };
 
         let activeOrder = null;
 
+        // ==================== NAVIGATION & MENU ====================
         function navigateTo(pageId) {
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
             document.getElementById('page-' + pageId).classList.add('active');
@@ -705,7 +955,7 @@
                         </div>
                         <div class="pt-4 mt-4 border-t border-rose/10 flex items-center justify-between">
                             <span class="font-serif font-bold text-lg text-rose">Rs. ${item.price.toLocaleString()}</span>
-                            <button onclick="orderDirectItem('${item.name}', ${item.price})" 
+                            <button onclick="orderDirectItem('${item.name.replace(/'/g, "\\'")}', ${item.price})" 
                                     class="bg-blush hover:bg-rose hover:text-white text-rose text-xs font-bold px-4 py-2 rounded-full transition">
                                 Order Now
                             </button>
@@ -781,18 +1031,65 @@
             btn.setAttribute('onclick', `orderDirectItem('${cake.name} (${sizeLabel})', ${price})`);
         }
 
-        function initCustomizer() {
+        // ==================== COLOR & SVG UTILITIES ====================
+        function shadeColor(hex, percent) {
+            let clean = hex.replace('#', '');
+            if (clean.length === 3) clean = clean.split('').map(c => c + c).join('');
+            const num = parseInt(clean, 16);
+            if (isNaN(num)) return hex;
+            let r = (num >> 16) + Math.round(2.55 * percent);
+            let g = ((num >> 8) & 0x00FF) + Math.round(2.55 * percent);
+            let b = (num & 0x0000FF) + Math.round(2.55 * percent);
+            r = Math.max(0, Math.min(255, r));
+            g = Math.max(0, Math.min(255, g));
+            b = Math.max(0, Math.min(255, b));
+            return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+
+        function isDarkHex(hex) {
+            let clean = hex.replace('#', '');
+            if (clean.length === 3) clean = clean.split('').map(c => c + c).join('');
+            const num = parseInt(clean, 16);
+            if (isNaN(num)) return false;
+            const r = (num >> 16) & 255;
+            const g = (num >> 8) & 255;
+            const b = num & 255;
+            const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            return lum < 0.52;
+        }
+
+        function triggerSparkles() {
+            const layer = document.getElementById('layer-sparkles');
+            if (!layer) return;
+            const pts = [
+                {x: 115, y: 120}, {x: 305, y: 122}, {x: 210, y: 95},
+                {x: 155, y: 195}, {x: 270, y: 192}
+            ];
+            layer.innerHTML = pts.map(p => `
+                <g transform="translate(${p.x}, ${p.y})">
+                    <path class="sparkle-anim" d="M 0 -9 L 2.2 -2.2 L 9 0 L 2.2 2.2 L 0 9 L -2.2 2.2 L -9 0 L -2.2 -2.2 Z" fill="#FACC15" stroke="#FFFFFF" stroke-width="0.6"/>
+                </g>
+            `).join('');
+            setTimeout(() => { if (layer) layer.innerHTML = ''; }, 720);
+        }
+
+        // ==================== CUSTOMIZER CONTROLS RENDERING ====================
+        function renderCustomizerControls() {
+            // 1. Shape
             document.getElementById('shape-options').innerHTML = shapes.map(s => `
                 <button type="button" onclick="selectOption('shape', '${s.id}')"
-                        class="opt-shape p-3 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${customCake.shape === s.id ? 'border-rose bg-blush text-rose font-bold' : 'border-cocoa/15 hover:bg-cream'}">
-                    <i class="fa-solid ${s.icon} text-lg"></i>
+                        class="p-2.5 rounded-xl border text-center transition flex flex-col items-center gap-1.5 ${customCake.shape === s.id ? 'border-rose bg-blush text-rose font-bold shadow-sm' : 'border-cocoa/15 hover:bg-cream text-cocoa'}">
+                    ${s.id === 'Rectangle'
+                        ? '<span class="w-6 h-4 rounded-sm border-2 border-current inline-block my-0.5"></span>'
+                        : `<i class="fa-solid ${s.icon} text-lg"></i>`}
                     <span class="text-xs">${s.id}</span>
                 </button>
             `).join('');
 
+            // 2. Size / Weight
             document.getElementById('size-options').innerHTML = sizes.map(s => `
                 <button type="button" onclick="selectOption('size', '${s.id}')"
-                        class="opt-size p-3.5 rounded-xl border text-left transition ${customCake.size.id === s.id ? 'border-rose bg-blush' : 'border-cocoa/15 hover:bg-cream'}">
+                        class="p-3.5 rounded-xl border text-left transition ${customCake.size.id === s.id ? 'border-rose bg-blush shadow-sm' : 'border-cocoa/15 hover:bg-cream'}">
                     <div class="flex justify-between items-center">
                         <span class="font-bold text-sm text-cocoa">${s.id}</span>
                         <span class="text-xs font-bold text-rose">Rs. ${s.price.toLocaleString()}</span>
@@ -801,33 +1098,106 @@
                 </button>
             `).join('');
 
+            // 3. Sponge Flavor
             document.getElementById('sponge-options').innerHTML = sponges.map(sp => `
                 <button type="button" onclick="selectOption('sponge', '${sp.id}')"
-                        class="opt-sponge p-3 rounded-xl border text-left transition flex items-center gap-2.5 ${customCake.sponge.id === sp.id ? 'border-rose bg-blush font-bold' : 'border-cocoa/15 hover:bg-cream'}">
-                    <span class="w-5 h-5 rounded-full border border-black/15 shrink-0" style="background-color:${sp.color}"></span>
-                    <span class="text-xs text-cocoa">${sp.id}</span>
-                </button>
-            `).join('');
-
-            document.getElementById('frosting-options').innerHTML = frostings.map(fr => `
-                <button type="button" onclick="selectOption('frosting', '${fr.id}')"
-                        class="opt-frosting p-3 rounded-xl border text-left transition ${customCake.frosting.id === fr.id ? 'border-rose bg-blush font-bold' : 'border-cocoa/15 hover:bg-cream'}">
-                    <span class="text-xs text-cocoa block">${fr.id}</span>
-                    <span class="text-[11px] text-rose font-semibold">${fr.extra > 0 ? '+Rs. ' + fr.extra : 'Included'}</span>
-                </button>
-            `).join('');
-
-            document.getElementById('design-options').innerHTML = designs.map(d => `
-                <button type="button" onclick="selectOption('design', '${d.id}')"
-                        class="opt-design rounded-xl border overflow-hidden text-center transition ${customCake.design.id === d.id ? 'border-2 border-rose ring-2 ring-rose/30' : 'border-cocoa/15 opacity-85 hover:opacity-100'}">
-                    <img src="${d.img}" onerror="this.onerror=null; this.src='${FALLBACK_IMG}';" alt="${d.id}" class="w-full h-16 object-cover">
-                    <div class="p-1.5 bg-white">
-                        <span class="text-xs font-bold text-cocoa block">${d.id}</span>
-                        <span class="text-[10px] text-rose">${d.extra > 0 ? '+Rs.' + d.extra : 'Included'}</span>
+                        class="p-3 rounded-xl border text-left transition flex items-center gap-2.5 ${customCake.sponge.id === sp.id ? 'border-rose bg-blush font-bold shadow-sm' : 'border-cocoa/15 hover:bg-cream'}">
+                    <span class="w-6 h-6 rounded-full border border-black/15 shrink-0 shadow-inner" style="background-color:${sp.color}"></span>
+                    <div class="min-w-0">
+                        <span class="text-xs text-cocoa block truncate">${sp.id}</span>
+                        <span class="text-[10px] text-cocoa/55 font-normal block truncate">${sp.desc}</span>
                     </div>
                 </button>
             `).join('');
 
+            // 4. Frosting Type
+            document.getElementById('frosting-options').innerHTML = frostings.map(fr => `
+                <button type="button" onclick="selectOption('frosting', '${fr.id}')"
+                        class="p-3 rounded-xl border text-left transition ${customCake.frosting.id === fr.id ? 'border-rose bg-blush font-bold shadow-sm' : 'border-cocoa/15 hover:bg-cream'}">
+                    <span class="text-xs text-cocoa block">${fr.id}</span>
+                    <span class="text-[10px] text-cocoa/55 font-normal block">${fr.finish}</span>
+                    <span class="text-[11px] text-rose font-semibold mt-0.5 block">${fr.extra > 0 ? '+Rs. ' + fr.extra : 'Included'}</span>
+                </button>
+            `).join('');
+
+            // 5. Frosting Color Swatches + Custom Color Picker
+            document.getElementById('selected-color-label').innerText = customCake.frostingColorName;
+            document.getElementById('frosting-color-options').innerHTML = frostingColors.map(fc => {
+                const active = customCake.frostingColor.toLowerCase() === fc.hex.toLowerCase() && !customCake.isCustomColor;
+                return `
+                    <button type="button" onclick="selectFrostingColor('${fc.name}', '${fc.hex}', false)" title="${fc.name}"
+                            class="group flex flex-col items-center gap-1">
+                        <span class="w-9 h-9 rounded-full border-2 transition transform ${active ? 'border-rose scale-110 ring-2 ring-rose/30' : 'border-cocoa/20 hover:scale-105'} shadow-sm"
+                              style="background-color: ${fc.hex};"></span>
+                        <span class="text-[10px] ${active ? 'text-rose font-bold' : 'text-cocoa/65'}">${fc.name.split(' ').pop()}</span>
+                    </button>
+                `;
+            }).join('') + `
+                <label class="flex flex-col items-center gap-1 cursor-pointer" title="Pick Custom Frosting Color">
+                    <span class="w-9 h-9 rounded-full border-2 flex items-center justify-center overflow-hidden shadow-sm transition ${customCake.isCustomColor ? 'border-rose scale-110 ring-2 ring-rose/30' : 'border-cocoa/25 hover:scale-105'}"
+                          style="background: conic-gradient(#ff6b6b, #ffd93d, #6bcb77, #4d96ff, #c77dff, #ff6b6b);">
+                        <input type="color" id="custom-frosting-picker" value="${customCake.frostingColor}"
+                               oninput="selectFrostingColor('Custom (' + this.value.toUpperCase() + ')', this.value, true)"
+                               class="opacity-0 w-full h-full cursor-pointer">
+                    </span>
+                    <span class="text-[10px] ${customCake.isCustomColor ? 'text-rose font-bold' : 'text-cocoa/65'}">Custom</span>
+                </label>
+            `;
+
+            // 6. Drip Style
+            document.getElementById('drip-options').innerHTML = drips.map(d => {
+                const active = customCake.drip.id === d.id;
+                return `
+                    <button type="button" onclick="selectOption('drip', '${d.id}')"
+                            class="p-2.5 rounded-xl border text-center transition flex flex-col items-center gap-1 ${active ? 'border-rose bg-blush font-bold shadow-sm' : 'border-cocoa/15 hover:bg-cream'}">
+                        <span class="w-5 h-5 rounded-full border border-black/15 flex items-center justify-center text-[10px]"
+                              style="background-color: ${d.color || '#FFFDF9'};">
+                            ${!d.color ? '<i class="fa-solid fa-ban text-cocoa/40"></i>' : ''}
+                        </span>
+                        <span class="text-[11px] text-cocoa leading-tight">${d.id.replace(' Drip', '')}</span>
+                        <span class="text-[10px] text-rose font-semibold">${d.extra > 0 ? '+Rs.' + d.extra : 'Free'}</span>
+                    </button>
+                `;
+            }).join('');
+
+            // 7. Toppings (Multiple Selectable)
+            document.getElementById('toppings-count-badge').innerText = `${customCake.toppings.length} selected`;
+            document.getElementById('topping-options').innerHTML = toppingsList.map(t => {
+                const active = customCake.toppings.includes(t.id);
+                return `
+                    <button type="button" onclick="toggleTopping('${t.id}')"
+                            class="p-2.5 rounded-xl border text-left transition flex items-center gap-2 relative ${active ? 'border-rose bg-blush shadow-sm ring-1 ring-rose/30' : 'border-cocoa/15 hover:bg-cream'}">
+                        <span class="text-lg leading-none">${t.emoji}</span>
+                        <div class="min-w-0 flex-grow">
+                            <span class="text-[11px] font-bold text-cocoa block truncate">${t.label}</span>
+                            <span class="text-[10px] text-rose font-semibold">+Rs. ${t.price}</span>
+                        </div>
+                        ${active ? '<i class="fa-solid fa-circle-check text-rose text-xs shrink-0"></i>' : ''}
+                    </button>
+                `;
+            }).join('');
+
+            // 8. Caption Font & Color Options
+            document.getElementById('caption-font-options').innerHTML = captionFonts.map(f => `
+                <button type="button" onclick="selectCaptionFont('${f.id}')"
+                        class="px-3 py-1.5 rounded-lg border text-xs transition ${customCake.captionFont.id === f.id ? 'border-rose bg-blush text-rose font-bold' : 'border-cocoa/15 text-cocoa hover:bg-cream'}"
+                        style="font-family: ${f.css};">
+                    ${f.label}
+                </button>
+            `).join('');
+
+            document.getElementById('caption-color-options').innerHTML = captionColors.map(c => {
+                const active = customCake.captionColor.name === c.name;
+                return `
+                    <button type="button" onclick="selectCaptionColor('${c.name}')" title="${c.name}"
+                            class="w-7 h-7 rounded-full border-2 transition ${active ? 'border-rose scale-110 ring-2 ring-rose/30' : 'border-cocoa/20 hover:scale-105'}"
+                            style="background-color: ${c.hex};"></button>
+                `;
+            }).join('');
+        }
+
+        function initCustomizer() {
+            renderCustomizerControls();
             updateLivePreview();
         }
 
@@ -835,70 +1205,573 @@
             if (type === 'shape') customCake.shape = value;
             if (type === 'size') customCake.size = sizes.find(s => s.id === value);
             if (type === 'sponge') customCake.sponge = sponges.find(s => s.id === value);
-            if (type === 'frosting') customCake.frosting = frostings.find(f => f.id === value);
-            if (type === 'design') customCake.design = designs.find(d => d.id === value);
-            initCustomizer();
+            if (type === 'frosting') {
+                customCake.frosting = frostings.find(f => f.id === value);
+                if (value === 'Chocolate Ganache' && customCake.frostingColorName === 'Classic White') {
+                    customCake.frostingColorName = 'Chocolate';
+                    customCake.frostingColor = '#543322';
+                    customCake.isCustomColor = false;
+                }
+            }
+            if (type === 'drip') {
+                customCake.drip = drips.find(d => d.id === value);
+                if (customCake.drip.color) triggerSparkles();
+            }
+            renderCustomizerControls();
+            updateLivePreview();
+        }
+
+        function selectFrostingColor(name, hex, isCustom) {
+            customCake.frostingColorName = name;
+            customCake.frostingColor = hex;
+            customCake.isCustomColor = isCustom;
+            if (isDarkHex(hex) && customCake.captionColor.name === 'Cocoa') {
+                customCake.captionColor = captionColors.find(c => c.name === 'White');
+            } else if (!isDarkHex(hex) && customCake.captionColor.name === 'White') {
+                customCake.captionColor = captionColors.find(c => c.name === 'Cocoa');
+            }
+            renderCustomizerControls();
+            updateLivePreview();
+        }
+
+        function toggleTopping(id) {
+            const idx = customCake.toppings.indexOf(id);
+            if (idx > -1) {
+                customCake.toppings.splice(idx, 1);
+            } else {
+                customCake.toppings.push(id);
+                triggerSparkles();
+            }
+            renderCustomizerControls();
+            updateLivePreview();
+        }
+
+        function clearAllToppings() {
+            customCake.toppings = [];
+            renderCustomizerControls();
+            updateLivePreview();
         }
 
         function updateCakeNote(val) {
-            customCake.note = val.trim() || "Happy Birthday!";
+            customCake.note = val;
+            updateLivePreview();
+        }
+
+        function applyCaptionPreset(text) {
+            customCake.note = text;
+            const input = document.getElementById('cake-note-input');
+            if (input) input.value = text;
+            updateLivePreview();
+        }
+
+        function selectCaptionFont(fontId) {
+            customCake.captionFont = captionFonts.find(f => f.id === fontId);
+            renderCustomizerControls();
+            updateLivePreview();
+        }
+
+        function selectCaptionColor(colorName) {
+            customCake.captionColor = captionColors.find(c => c.name === colorName);
+            renderCustomizerControls();
+            updateLivePreview();
+        }
+
+        function resetCustomizer() {
+            customCake = {
+                shape: "Round",
+                size: sizes[0],
+                sponge: sponges[0],
+                frosting: frostings[0],
+                frostingColorName: "Blush Pink",
+                frostingColor: "#F7C5D0",
+                isCustomColor: false,
+                drip: drips[1],
+                toppings: ["Strawberries", "Rainbow sprinkles"],
+                note: "Happy Birthday!",
+                captionFont: captionFonts[0],
+                captionColor: captionColors[0]
+            };
+            const input = document.getElementById('cake-note-input');
+            if (input) input.value = customCake.note;
+            renderCustomizerControls();
             updateLivePreview();
         }
 
         function calculateCustomTotal() {
-            return customCake.size.price + customCake.frosting.extra + customCake.design.extra;
+            const toppingsTotal = customCake.toppings.reduce((sum, id) => {
+                const found = toppingsList.find(t => t.id === id);
+                return sum + (found ? found.price : 0);
+            }, 0);
+            return customCake.size.price + customCake.frosting.extra + customCake.drip.extra + toppingsTotal;
+        }
+
+        // ==================== LIVE SVG CAKE RENDERER ====================
+        function getShapeGeometry(shape) {
+            if (shape === 'Square') {
+                const frontPts = [];
+                for (let i = 0; i <= 10; i++) frontPts.push({ x: 90 + i * 12, y: 168 + i * 5.2 });
+                for (let i = 1; i <= 10; i++) frontPts.push({ x: 210 + i * 12, y: 220 - i * 5.2 });
+
+                const rimPts = [
+                    {x:210,y:122}, {x:246,y:138}, {x:282,y:154}, {x:316,y:168},
+                    {x:282,y:184}, {x:246,y:200}, {x:210,y:214},
+                    {x:174,y:200}, {x:138,y:184}, {x:104,y:168},
+                    {x:138,y:154}, {x:174,y:138}
+                ];
+                return {
+                    board: `<polygon points="210,164 358,230 210,296 62,230" fill="#F2E6D8" stroke="#D8C2A8" stroke-width="2"/>
+                            <polygon points="210,296 358,230 358,237 210,303 62,237 62,230" fill="#D5BEA3"/>`,
+                    walls: [
+                        { d: "M 90 168 L 210 220 L 210 288 L 90 236 Z", shade: -14 },
+                        { d: "M 210 220 L 330 168 L 330 236 L 210 288 Z", shade: -6 }
+                    ],
+                    topD: "M 210 116 L 330 168 L 210 220 L 90 168 Z",
+                    topCx: 210, topCy: 168, textY: 171,
+                    rx: 75, ry: 30,
+                    frontPts,
+                    rimPts
+                };
+            }
+
+            if (shape === 'Rectangle') {
+                const frontPts = [];
+                for (let i = 0; i <= 20; i++) frontPts.push({ x: 80 + i * 13, y: 204 });
+
+                const rimPts = [
+                    {x:120,y:136}, {x:165,y:136}, {x:210,y:136}, {x:255,y:136}, {x:300,y:136},
+                    {x:324,y:168}, {x:326,y:196}, {x:270,y:198}, {x:210,y:198},
+                    {x:150,y:198}, {x:94,y:196}, {x:96,y:168}
+                ];
+                return {
+                    board: `<polygon points="86,194 334,194 366,282 54,282" fill="#F2E6D8" stroke="#D8C2A8" stroke-width="2"/>
+                            <rect x="54" y="282" width="312" height="7" rx="2" fill="#D5BEA3"/>`,
+                    walls: [
+                        { d: "M 80 204 L 340 204 L 340 272 L 80 272 Z", shade: -10 }
+                    ],
+                    topD: "M 106 130 L 314 130 L 340 204 L 80 204 Z",
+                    topCx: 210, topCy: 168, textY: 171,
+                    rx: 95, ry: 26,
+                    frontPts,
+                    rimPts
+                };
+            }
+
+            if (shape === 'Heart') {
+                const frontPts = [
+                    {x:100,y:162}, {x:104,y:178}, {x:115,y:192}, {x:132,y:204}, {x:152,y:215},
+                    {x:172,y:224}, {x:192,y:232}, {x:210,y:238}, {x:228,y:232}, {x:248,y:224},
+                    {x:268,y:215}, {x:288,y:204}, {x:305,y:192}, {x:316,y:178}, {x:320,y:162}
+                ];
+                const rimPts = [
+                    {x:210,y:148}, {x:242,y:128}, {x:278,y:130}, {x:304,y:148},
+                    {x:305,y:174}, {x:280,y:196}, {x:245,y:214}, {x:210,y:228},
+                    {x:175,y:214}, {x:140,y:196}, {x:115,y:174}, {x:116,y:148},
+                    {x:142,y:130}, {x:178,y:128}
+                ];
+                return {
+                    board: `<path d="M 210 198 C 242 162, 344 166, 344 222 C 344 260, 272 288, 210 314 C 148 288, 76 260, 76 222 C 76 166, 178 162, 210 198 Z" fill="#F2E6D8" stroke="#D8C2A8" stroke-width="2"/>`,
+                    walls: [
+                        { d: "M 100 162 C 100 194, 160 218, 210 238 L 210 304 C 160 284, 100 260, 100 228 Z", shade: -14 },
+                        { d: "M 210 238 C 260 218, 320 194, 320 162 L 320 228 C 320 260, 260 284, 210 304 Z", shade: -6 }
+                    ],
+                    topD: "M 210 142 C 235 112, 320 116, 320 162 C 320 194, 260 218, 210 238 C 160 218, 100 194, 100 162 C 100 116, 185 112, 210 142 Z",
+                    topCx: 210, topCy: 175, textY: 180,
+                    rx: 66, ry: 26,
+                    frontPts,
+                    rimPts
+                };
+            }
+
+            if (shape === 'Hexagon') {
+                const frontPts = [];
+                for (let i = 0; i <= 6; i++) frontPts.push({ x: 86 + (62 * i / 6), y: 168 + (45 * i / 6) });
+                for (let i = 1; i <= 8; i++) frontPts.push({ x: 148 + (124 * i / 8), y: 213 });
+                for (let i = 1; i <= 6; i++) frontPts.push({ x: 272 + (62 * i / 6), y: 213 - (45 * i / 6) });
+
+                const rimPts = [
+                    {x:154,y:130}, {x:210,y:130}, {x:266,y:130},
+                    {x:316,y:168}, {x:266,y:206}, {x:210,y:206},
+                    {x:154,y:206}, {x:104,y:168}
+                ];
+                return {
+                    board: `<polygon points="140,176 280,176 356,232 280,288 140,288 64,232" fill="#F2E6D8" stroke="#D8C2A8" stroke-width="2"/>
+                            <polygon points="64,232 140,288 280,288 356,232 356,239 280,295 140,295 64,239" fill="#D5BEA3"/>`,
+                    walls: [
+                        { d: "M 86 168 L 148 213 L 148 280 L 86 235 Z", shade: -16 },
+                        { d: "M 148 213 L 272 213 L 272 280 L 148 280 Z", shade: -10 },
+                        { d: "M 272 213 L 334 168 L 334 235 L 272 280 Z", shade: -4 }
+                    ],
+                    topD: "M 148 123 L 272 123 L 334 168 L 272 213 L 148 213 L 86 168 Z",
+                    topCx: 210, topCy: 168, textY: 171,
+                    rx: 78, ry: 28,
+                    frontPts,
+                    rimPts
+                };
+            }
+
+            // Default: Round
+            const frontPts = [];
+            for (let i = 0; i <= 20; i++) {
+                const t = (Math.PI * i) / 20;
+                frontPts.push({ x: 210 - 124 * Math.cos(t), y: 170 + 48 * Math.sin(t) });
+            }
+            const rimPts = [];
+            for (let i = 0; i < 14; i++) {
+                const a = (Math.PI * 2 * i) / 14;
+                rimPts.push({ x: 210 + 108 * Math.cos(a), y: 170 + 39 * Math.sin(a) });
+            }
+            return {
+                board: `<ellipse cx="210" cy="242" rx="150" ry="56" fill="#F2E6D8" stroke="#D8C2A8" stroke-width="2"/>
+                        <path d="M 60 242 A 150 56 0 0 0 360 242 L 360 248 A 150 56 0 0 1 60 248 Z" fill="#D5BEA3"/>`,
+                walls: [
+                    { d: "M 86 170 L 86 238 A 124 48 0 0 0 334 238 L 334 170 Z", shade: -10 }
+                ],
+                topD: "M 86 170 A 124 48 0 1 0 334 170 A 124 48 0 1 0 86 170 Z",
+                topCx: 210, topCy: 170, textY: 173,
+                rx: 84, ry: 30,
+                frontPts,
+                rimPts
+            };
+        }
+
+        function buildDripPath(frontPts) {
+            if (!frontPts || frontPts.length < 2) return '';
+            const dripLengths = [14, 34, 20, 44, 18, 38, 22, 48, 25, 36, 16, 42, 20, 32, 14];
+            let d = `M ${frontPts[0].x.toFixed(1)} ${frontPts[0].y.toFixed(1)} `;
+            for (let i = 0; i < frontPts.length - 1; i++) {
+                const p1 = frontPts[i];
+                const p2 = frontPts[i + 1];
+                const mx = (p1.x + p2.x) / 2;
+                const my = (p1.y + p2.y) / 2;
+                const len = dripLengths[i % dripLengths.length];
+                d += `Q ${p1.x.toFixed(1)} ${(p1.y + len * 0.55).toFixed(1)}, ${mx.toFixed(1)} ${(my + len).toFixed(1)} `;
+                d += `Q ${p2.x.toFixed(1)} ${(p2.y + len * 0.55).toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)} `;
+            }
+            for (let i = frontPts.length - 1; i >= 0; i--) {
+                d += `L ${frontPts[i].x.toFixed(1)} ${(frontPts[i].y - 3).toFixed(1)} `;
+            }
+            d += 'Z';
+            return d;
+        }
+
+        // Chunky glossy game-style SVG toppings with nested animation groups
+        function renderToppingSVG(id, x, y, idx) {
+            switch (id) {
+                case 'Strawberries':
+                    return `<g transform="translate(${x}, ${y}) scale(1.28)">
+                        <g class="topping-pop">
+                            <ellipse cx="0" cy="4.5" rx="9" ry="3.4" fill="#000" fill-opacity="0.18"/>
+                            <path d="M -8.5 -6 C -9.5 2, -3.5 9.5, 0 10.5 C 3.5 9.5, 9.5 2, 8.5 -6 C 4 -9.5, -4 -9.5, -8.5 -6 Z" fill="#E11D48" stroke="#9F1239" stroke-width="0.7"/>
+                            <path d="M -3.5 -5.5 C -3.5 -1, -1.2 4, 0 6.5" stroke="#FDA4AF" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                            <circle cx="-3.5" cy="0" r="0.85" fill="#FEF08A"/><circle cx="3.5" cy="-1" r="0.85" fill="#FEF08A"/><circle cx="0" cy="4.5" r="0.85" fill="#FEF08A"/>
+                            <path d="M -6 -7.5 L 0 -4 L 6 -7.5 L 2.5 -11 L 0 -7.5 L -2.5 -11 Z" fill="#16A34A" stroke="#14532D" stroke-width="0.4"/>
+                        </g>
+                    </g>`;
+                case 'Cherries':
+                    return `<g transform="translate(${x}, ${y}) scale(1.25)">
+                        <g class="topping-pop">
+                            <ellipse cx="0" cy="6" rx="7.5" ry="2.6" fill="#000" fill-opacity="0.18"/>
+                            <path d="M -2 -3 Q 2 -14 8 -16" stroke="#15803D" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+                            <path d="M 4 -2 Q 5 -11 8 -16" stroke="#16A34A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                            <circle cx="-2.5" cy="1.5" r="6" fill="#B91C1C" stroke="#7F1D1D" stroke-width="0.6"/>
+                            <circle cx="4.5" cy="2.5" r="5.5" fill="#991B1B" stroke="#7F1D1D" stroke-width="0.6"/>
+                            <circle cx="-4.5" cy="-0.5" r="1.9" fill="#FCA5A5" fill-opacity="0.8"/>
+                            <circle cx="2.8" cy="0.5" r="1.6" fill="#FCA5A5" fill-opacity="0.75"/>
+                        </g>
+                    </g>`;
+                case 'Blueberries':
+                    return `<g transform="translate(${x}, ${y}) scale(1.25)">
+                        <g class="topping-pop">
+                            <ellipse cx="0" cy="5.5" rx="8.5" ry="3" fill="#000" fill-opacity="0.16"/>
+                            <circle cx="-4.5" cy="2" r="4.8" fill="#1E3A8A" stroke="#172554" stroke-width="0.5"/>
+                            <circle cx="4" cy="3" r="4.5" fill="#1D4ED8" stroke="#1E3A8A" stroke-width="0.5"/>
+                            <circle cx="0" cy="-2.2" r="4.7" fill="#2563EB" stroke="#1E40AF" stroke-width="0.5"/>
+                            <circle cx="-1.2" cy="-3.8" r="1.4" fill="#BFDBFE"/>
+                            <circle cx="-5.2" cy="0.5" r="1.2" fill="#BFDBFE"/>
+                        </g>
+                    </g>`;
+                case 'Oreo cookies':
+                    return `<g transform="translate(${x}, ${y}) rotate(${idx % 2 === 0 ? -16 : 16}) scale(1.22)">
+                        <g class="topping-pop">
+                            <ellipse cx="0" cy="5" rx="10.5" ry="4.2" fill="#000" fill-opacity="0.2"/>
+                            <circle cx="0" cy="-1" r="10" fill="#291D1A" stroke="#140D0B" stroke-width="1"/>
+                            <ellipse cx="0" cy="-1" rx="8.2" ry="6.8" fill="none" stroke="#6D4C41" stroke-width="1.3" stroke-dasharray="2 1.5"/>
+                            <path d="M -8 3.5 Q 0 7 8 3.5" stroke="#FFFDF9" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+                        </g>
+                    </g>`;
+                case 'Macarons': {
+                    const macColors = ['#F472B6', '#6EE7B7', '#C4B5FD', '#FDE047'];
+                    const mc = macColors[idx % macColors.length];
+                    return `<g transform="translate(${x}, ${y}) rotate(${idx % 2 === 0 ? -10 : 10}) scale(1.25)">
+                        <g class="topping-pop">
+                            <ellipse cx="0" cy="6" rx="10.5" ry="3.8" fill="#000" fill-opacity="0.18"/>
+                            <ellipse cx="0" cy="2" rx="10.5" ry="4.6" fill="${mc}" stroke="${shadeColor(mc, -18)}" stroke-width="0.7"/>
+                            <rect x="-10" y="-1.6" width="20" height="3.4" rx="1.6" fill="#FFFDF9"/>
+                            <ellipse cx="0" cy="-3.2" rx="10.5" ry="5" fill="${mc}" stroke="${shadeColor(mc, -18)}" stroke-width="0.7"/>
+                            <ellipse cx="-3" cy="-5" rx="4.2" ry="1.4" fill="#FFF" fill-opacity="0.55"/>
+                        </g>
+                    </g>`;
+                }
+                case 'Candy': {
+                    const candyCols = ['#EF4444', '#3B82F6', '#FACC15', '#22C55E', '#A855F7'];
+                    const cc = candyCols[idx % candyCols.length];
+                    return `<g transform="translate(${x}, ${y}) scale(1.28)">
+                        <g class="topping-pop">
+                            <ellipse cx="0" cy="3.5" rx="6" ry="2.4" fill="#000" fill-opacity="0.18"/>
+                            <circle cx="0" cy="0" r="6" fill="${cc}" stroke="#FFF" stroke-width="0.9"/>
+                            <circle cx="-1.8" cy="-1.8" r="1.7" fill="#FFF" fill-opacity="0.75"/>
+                        </g>
+                    </g>`;
+                }
+                case 'Edible flowers': {
+                    const flwCols = ['#F472B6', '#C084FC', '#FB7185', '#FBBF24'];
+                    const fc = flwCols[idx % flwCols.length];
+                    return `<g transform="translate(${x}, ${y}) scale(1.28)">
+                        <g class="topping-pop">
+                            <circle cx="0" cy="-5" r="4" fill="${fc}" stroke="#FFF" stroke-width="0.4"/>
+                            <circle cx="4.8" cy="-1.5" r="4" fill="${fc}" stroke="#FFF" stroke-width="0.4"/>
+                            <circle cx="3" cy="4" r="4" fill="${fc}" stroke="#FFF" stroke-width="0.4"/>
+                            <circle cx="-3" cy="4" r="4" fill="${fc}" stroke="#FFF" stroke-width="0.4"/>
+                            <circle cx="-4.8" cy="-1.5" r="4" fill="${fc}" stroke="#FFF" stroke-width="0.4"/>
+                            <circle cx="0" cy="0" r="3" fill="#FDE047" stroke="#CA8A04" stroke-width="0.6"/>
+                        </g>
+                    </g>`;
+                }
+                default:
+                    return '';
+            }
         }
 
         function updateLivePreview() {
             const total = calculateCustomTotal();
-            const visual = document.getElementById('live-cake-visual');
-            const heartSvg = document.getElementById('heart-svg');
-            const heartPath = document.getElementById('heart-path');
+            const geom = getShapeGeometry(customCake.shape);
+            const fColor = customCake.frostingColor;
+            const fStroke = shadeColor(fColor, -18);
 
-            visual.className = "w-36 h-36 flex items-center justify-center p-3 text-center shadow-md transition-all duration-300 border-4 relative";
-            heartSvg.classList.add('hidden');
+            // 1. Scale group for 1 lb / 2 lb / 3 lb
+            const scaleGroup = document.getElementById('cake-scale-group');
+            scaleGroup.setAttribute('transform', `translate(210, 210) scale(${customCake.size.scale}) translate(-210, -210)`);
 
-            if (customCake.shape === 'Heart') {
-                visual.classList.add('cake-shape-heart');
-                heartSvg.classList.remove('hidden');
-                heartPath.setAttribute('fill', customCake.sponge.color);
-                heartPath.setAttribute('stroke', customCake.frosting.border);
+            // 2. Cake Board
+            document.getElementById('layer-board').innerHTML = geom.board;
+
+            // 3. Cake Body
+            const wallsHtml = geom.walls.map(w => `
+                <path d="${w.d}" fill="${shadeColor(fColor, w.shade)}" stroke="${fStroke}" stroke-width="1"/>
+            `).join('');
+            const topHtml = `<path d="${geom.topD}" fill="${fColor}" stroke="${fStroke}" stroke-width="1.2"/>`;
+            document.getElementById('layer-cake-body').innerHTML = wallsHtml + topHtml;
+
+            // 4. Frosting Finish Overlay
+            let finishHtml = '';
+            if (customCake.frosting.id === 'Chocolate Ganache') {
+                finishHtml = `<path d="${geom.topD}" fill="url(#gloss-grad)"/>
+                              <ellipse cx="${geom.topCx - 28}" cy="${geom.topCy - 14}" rx="34" ry="8" fill="#FFFFFF" fill-opacity="0.32" transform="rotate(-10 ${geom.topCx - 28} ${geom.topCy - 14})"/>`;
+            } else if (customCake.frosting.id === 'Whipped Cream') {
+                finishHtml = `<ellipse cx="${geom.topCx}" cy="${geom.topCy}" rx="${geom.rx * 0.72}" ry="${geom.ry * 0.72}" fill="none" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="3" stroke-dasharray="10 6"/>`;
+            } else if (customCake.frosting.id === 'Cream Cheese') {
+                finishHtml = `<path d="M ${geom.topCx - 45} ${geom.topCy - 10} Q ${geom.topCx} ${geom.topCy - 20} ${geom.topCx + 45} ${geom.topCy - 8}" fill="none" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2.5" stroke-linecap="round"/>`;
             } else {
-                visual.classList.add('cake-shape-' + customCake.shape.toLowerCase());
-                visual.style.backgroundColor = customCake.sponge.color;
-                visual.style.borderColor = customCake.frosting.border;
+                finishHtml = `<ellipse cx="${geom.topCx - 20}" cy="${geom.topCy - 10}" rx="28" ry="6" fill="#FFFFFF" fill-opacity="0.18"/>`;
+            }
+            document.getElementById('layer-frosting-finish').innerHTML = finishHtml;
+
+            // 5. Drip Layer
+            if (customCake.drip.color) {
+                const dripD = buildDripPath(geom.frontPts);
+                document.getElementById('layer-drip').innerHTML = `
+                    <g class="drip-anim">
+                        <path d="${dripD}" fill="${customCake.drip.color}" stroke="${shadeColor(customCake.drip.color, -15)}" stroke-width="0.8"/>
+                        <path d="${dripD}" fill="url(#gloss-grad)" opacity="0.5"/>
+                    </g>`;
+            } else {
+                document.getElementById('layer-drip').innerHTML = '';
             }
 
-            const isDarkSponge = customCake.sponge.id === 'Dark Chocolate' || customCake.sponge.id === 'Red Velvet';
-            const textEl = document.getElementById('live-cake-text');
-            textEl.style.color = isDarkSponge ? '#FFFFFF' : '#3E2723';
-            textEl.innerText = customCake.note;
+            // 6. Piped Rim Border
+            const borderColor = shadeColor(fColor, isDarkHex(fColor) ? 14 : 6);
+            const borderStroke = shadeColor(fColor, -15);
+            const borderHtml = geom.rimPts.map(pt => {
+                const r = customCake.frosting.id === 'Whipped Cream' ? 7 : 5.5;
+                return customCake.frosting.id === 'Chocolate Ganache'
+                    ? ''
+                    : `<circle cx="${pt.x}" cy="${pt.y}" r="${r}" fill="${borderColor}" stroke="${borderStroke}" stroke-width="0.7"/>`;
+            }).join('');
+            document.getElementById('layer-piped-border').innerHTML = borderHtml;
 
-            document.getElementById('live-design-img').src = customCake.design.img;
-            document.getElementById('live-design-caption').innerText = customCake.design.id + " Style";
-            document.getElementById('live-flavor-label').innerText = customCake.sponge.id + " Sponge";
+            // 7. Toppings Layer (All coordinates safely isolated on outer <g>!)
+            let toppingsHtml = '';
+
+            // 7a. Rainbow sprinkles
+            if (customCake.toppings.includes('Rainbow sprinkles')) {
+                const spCols = ['#EF4444', '#3B82F6', '#FACC15', '#10B981', '#EC4899', '#8B5CF6'];
+                for (let i = 0; i < 34; i++) {
+                    const angle = i * 2.39996;
+                    const dist = Math.sqrt((i + 1) / 36);
+                    const sx = geom.topCx + Math.cos(angle) * geom.rx * 0.90 * dist;
+                    const sy = geom.topCy + Math.sin(angle) * geom.ry * 0.90 * dist;
+                    const rot = (i * 47) % 180;
+                    toppingsHtml += `<g transform="translate(${sx.toFixed(1)}, ${sy.toFixed(1)}) rotate(${rot})">
+                        <rect class="topping-pop" x="-3.4" y="-1.3" width="6.8" height="2.6" rx="1.3" fill="${spCols[i % spCols.length]}"/>
+                    </g>`;
+                }
+            }
+
+            // 7b. Chocolate chips
+            if (customCake.toppings.includes('Chocolate chips')) {
+                for (let i = 0; i < 22; i++) {
+                    const angle = (i + 0.5) * 2.39996;
+                    const dist = Math.sqrt((i + 2) / 26);
+                    const cx = geom.topCx + Math.cos(angle) * geom.rx * 0.82 * dist;
+                    const cy = geom.topCy + Math.sin(angle) * geom.ry * 0.82 * dist;
+                    toppingsHtml += `<g transform="translate(${cx.toFixed(1)}, ${cy.toFixed(1)})">
+                        <path class="topping-pop" d="M 0 -5 Q 5 2 0 4 Q -5 2 0 -5 Z" fill="#3E2723" stroke="#261410" stroke-width="0.6"/>
+                    </g>`;
+                }
+            }
+
+            // 7c. Perimeter / Crown Toppings
+            const ringTypes = ['Strawberries', 'Cherries', 'Blueberries', 'Oreo cookies', 'Macarons', 'Candy', 'Edible flowers']
+                .filter(id => customCake.toppings.includes(id));
+
+            if (ringTypes.length > 0) {
+                const slots = geom.rimPts;
+                slots.forEach((pt, sIdx) => {
+                    const ix = geom.topCx + (pt.x - geom.topCx) * 0.80;
+                    const iy = geom.topCy + (pt.y - geom.topCy) * 0.80;
+                    if (ringTypes.length === 1) {
+                        if (sIdx % 2 === 0 || slots.length <= 10) {
+                            toppingsHtml += renderToppingSVG(ringTypes[0], ix.toFixed(1), iy.toFixed(1), sIdx);
+                        }
+                    } else {
+                        const typeId = ringTypes[sIdx % ringTypes.length];
+                        toppingsHtml += renderToppingSVG(typeId, ix.toFixed(1), iy.toFixed(1), sIdx);
+                    }
+                });
+            }
+
+            // 7d. Birthday Candles
+            if (customCake.toppings.includes('Birthday candles')) {
+                const candlePositions = [
+                    { x: geom.topCx - 42, y: geom.topCy - 18, col: '#F472B6' },
+                    { x: geom.topCx - 15, y: geom.topCy - 25, col: '#60A5FA' },
+                    { x: geom.topCx + 15, y: geom.topCy - 25, col: '#FBBF24' },
+                    { x: geom.topCx + 42, y: geom.topCy - 18, col: '#34D399' }
+                ];
+                candlePositions.forEach(c => {
+                    toppingsHtml += `
+                        <g transform="translate(${c.x}, ${c.y})">
+                            <g class="topping-pop">
+                                <ellipse cx="0" cy="2.5" rx="4.5" ry="2" fill="#000" fill-opacity="0.16"/>
+                                <rect x="-3" y="-34" width="6" height="35" rx="2" fill="${c.col}" stroke="#FFF" stroke-width="0.7"/>
+                                <path d="M -2.5 -25 L 2.5 -21 M -2.5 -15 L 2.5 -11 M -2.5 -5 L 2.5 -1" stroke="#FFF" stroke-opacity="0.75" stroke-width="1.4"/>
+                                <line x1="0" y1="-34" x2="0" y2="-38" stroke="#3E2723" stroke-width="1.2"/>
+                                <g class="candle-flame">
+                                    <path d="M 0 -51 C 4.5 -44, 4.5 -38, 0 -38 C -4.5 -38, -4.5 -44, 0 -51 Z" fill="#F97316"/>
+                                    <path d="M 0 -47.5 C 2.2 -43, 2.2 -39, 0 -39 C -2.2 -39, -2.2 -43, 0 -47.5 Z" fill="#FEF08A"/>
+                                </g>
+                            </g>
+                        </g>`;
+                });
+            }
+
+            // 7e. Cake Topper
+            if (customCake.toppings.includes('Cake topper')) {
+                const ty = geom.topCy - 24;
+                toppingsHtml += `
+                    <g transform="translate(${geom.topCx}, ${ty})">
+                        <g class="topping-pop">
+                            <line x1="-18" y1="-28" x2="-14" y2="2" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"/>
+                            <line x1="18" y1="-28" x2="14" y2="2" stroke="#D4AF37" stroke-width="2.2" stroke-linecap="round"/>
+                            <path d="M -44 -44 C -44 -74, 44 -74, 44 -44 C 44 -25, -44 -25, -44 -44 Z" fill="#FFFDF9" fill-opacity="0.3" stroke="#D4AF37" stroke-width="2.6"/>
+                            <path d="M 0 -66 L 2.5 -60 L 9 -60 L 4 -56 L 6 -50 L 0 -54 L -6 -50 L -4 -56 L -9 -60 L -2.5 -60 Z" fill="#FBBF24" stroke="#B8860B" stroke-width="0.6"/>
+                            <text x="0" y="-36" text-anchor="middle" fill="#B8860B" font-family="'Great Vibes', cursive" font-size="20" font-weight="bold">Celebrate</text>
+                        </g>
+                    </g>`;
+            }
+
+            document.getElementById('layer-toppings').innerHTML = toppingsHtml;
+
+            // 8. Cake Caption / Message
+            const noteText = customCake.note.trim();
+            if (noteText) {
+                const fontSize = noteText.length > 20 ? 12.5 : (noteText.length > 13 ? 14.5 : 17);
+                const italicAttr = customCake.captionFont.italic ? 'italic' : 'normal';
+                const needsHalo = customCake.toppings.includes('Rainbow sprinkles') || customCake.toppings.includes('Chocolate chips');
+                const haloFill = isDarkHex(fColor) ? 'rgba(40,20,15,0.62)' : 'rgba(255,253,249,0.78)';
+                const haloHtml = needsHalo
+                    ? `<rect x="${geom.topCx - 68}" y="${geom.textY - 14}" width="136" height="24" rx="12" fill="${haloFill}"/>`
+                    : '';
+
+                document.getElementById('layer-caption').innerHTML = `
+                    <g>
+                        ${haloHtml}
+                        <text x="${geom.topCx}" y="${geom.textY + 2}" text-anchor="middle"
+                              fill="${customCake.captionColor.hex}"
+                              font-family="${customCake.captionFont.css}"
+                              font-style="${italicAttr}"
+                              font-weight="700"
+                              font-size="${fontSize}">
+                            ${escapeHtml(noteText)}
+                        </text>
+                    </g>`;
+            } else {
+                document.getElementById('layer-caption').innerHTML = '';
+            }
+
+            // 9. Update Cutaway Slice Badge
+            document.getElementById('slice-frosting-top').setAttribute('fill', fColor);
+            document.getElementById('slice-filling-1').setAttribute('fill', fColor);
+            document.getElementById('slice-filling-2').setAttribute('fill', fColor);
+            document.getElementById('slice-sponge-1').setAttribute('fill', customCake.sponge.color);
+            document.getElementById('slice-sponge-2').setAttribute('fill', customCake.sponge.color);
+            document.getElementById('slice-sponge-3').setAttribute('fill', customCake.sponge.color);
+            document.getElementById('slice-sponge-label').innerText = customCake.sponge.id + ' Sponge';
+            document.getElementById('slice-frosting-label').innerText = customCake.frosting.id;
+
+            // 10. Update Badges & Summary Panel
             document.getElementById('preview-badge').innerText = `${customCake.shape} • ${customCake.size.id}`;
+            document.getElementById('preview-serves-badge').innerText = customCake.size.serves;
 
             document.getElementById('sum-shape-size').innerText = `${customCake.shape} • ${customCake.size.id} (${customCake.size.serves})`;
-            document.getElementById('sum-flavor').innerText = customCake.sponge.id;
-            document.getElementById('sum-frosting').innerText = customCake.frosting.id;
-            document.getElementById('sum-design').innerText = customCake.design.id;
-            document.getElementById('sum-note').innerText = `"${customCake.note}"`;
+            document.getElementById('sum-flavor').innerText = `${customCake.sponge.id} Sponge`;
+            document.getElementById('sum-frosting').innerHTML = `
+                <span class="w-3 h-3 rounded-full border border-black/20 inline-block shrink-0" style="background-color:${fColor}"></span>
+                <span>${customCake.frosting.id} • ${customCake.frostingColorName}</span>`;
+            document.getElementById('sum-drip').innerText = customCake.drip.id;
+            document.getElementById('sum-toppings').innerText = customCake.toppings.length > 0 ? customCake.toppings.join(', ') : 'None';
+            document.getElementById('sum-note').innerText = noteText ? `"${noteText}"` : 'No message';
             document.getElementById('sum-price').innerText = `Rs. ${total.toLocaleString()}`;
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;")
+                      .replace(/</g, "&lt;")
+                      .replace(/>/g, "&gt;")
+                      .replace(/"/g, "&quot;")
+                      .replace(/'/g, "&#039;");
+        }
+
+        // ==================== ORDER & WHATSAPP INTEGRATION ====================
+        function buildCustomCakeOrderDetails() {
+            const noteText = customCake.note.trim();
+            return [
+                { label: "Shape", val: customCake.shape },
+                { label: "Size / Weight", val: `${customCake.size.id} (${customCake.size.serves})` },
+                { label: "Sponge Flavor", val: customCake.sponge.id },
+                { label: "Cream / Frosting", val: customCake.frosting.id },
+                { label: "Frosting Color", val: `${customCake.frostingColorName} (${customCake.frostingColor.toUpperCase()})` },
+                { label: "Glaze / Drip", val: customCake.drip.id },
+                { label: "Toppings", val: customCake.toppings.length ? customCake.toppings.join(', ') : "None" },
+                { label: "Cake Caption", val: noteText ? `"${noteText}" (${customCake.captionFont.label}, ${customCake.captionColor.name})` : "None" }
+            ];
         }
 
         function proceedToOrderWithCustomCake() {
             const total = calculateCustomTotal();
             activeOrder = {
                 type: "Custom Designed Cake",
-                details: [
-                    { label: "Shape", val: customCake.shape },
-                    { label: "Size", val: `${customCake.size.id} (${customCake.size.serves})` },
-                    { label: "Sponge Flavor", val: customCake.sponge.id },
-                    { label: "Frosting & Filling", val: customCake.frosting.id },
-                    { label: "Design Style", val: customCake.design.id },
-                    { label: "Cake Message", val: `"${customCake.note}"` }
-                ],
+                details: buildCustomCakeOrderDetails(),
                 total: total
             };
             navigateTo('order');
@@ -918,18 +1791,10 @@
 
         function renderOrderSummary() {
             if (!activeOrder) {
-                const total = calculateCustomTotal();
                 activeOrder = {
                     type: "Custom Designed Cake",
-                    details: [
-                        { label: "Shape", val: customCake.shape },
-                        { label: "Size", val: customCake.size.id },
-                        { label: "Sponge Flavor", val: customCake.sponge.id },
-                        { label: "Frosting & Filling", val: customCake.frosting.id },
-                        { label: "Design Style", val: customCake.design.id },
-                        { label: "Cake Message", val: `"${customCake.note}"` }
-                    ],
-                    total: total
+                    details: buildCustomCakeOrderDetails(),
+                    total: calculateCustomTotal()
                 };
             }
 
@@ -937,9 +1802,9 @@
             box.innerHTML = `
                 <p class="font-bold text-rose text-xs uppercase tracking-wider mb-2">${activeOrder.type}</p>
                 ${activeOrder.details.map(d => `
-                    <div class="flex justify-between">
-                        <span class="text-cocoa/70">${d.label}:</span>
-                        <span class="font-semibold text-right">${d.val}</span>
+                    <div class="flex justify-between gap-3">
+                        <span class="text-cocoa/70 shrink-0">${d.label}:</span>
+                        <span class="font-semibold text-right">${escapeHtml(String(d.val))}</span>
                     </div>
                 `).join('')}
             `;
@@ -953,20 +1818,25 @@
             const date = document.getElementById('cust-date').value;
             const address = document.getElementById('cust-address').value;
 
-            let cakeLines = activeOrder.details.map(d => `• *${d.label}:* ${d.val}`).join('%0A');
+            if (!activeOrder) renderOrderSummary();
 
-            const message = `*NEW ORDER - CRUMB & CREAM BAKERY*%0A%0A` +
-                            `*Customer Details:*%0A` +
-                            `• *Name:* ${name}%0A` +
-                            `• *Phone:* ${phone}%0A` +
-                            `• *Delivery Date:* ${date}%0A` +
-                            `• *Address:* ${address}%0A%0A` +
-                            `*Order Details (${activeOrder.type}):*%0A` +
-                            `${cakeLines}%0A%0A` +
-                            `*Total Amount:* Rs. ${activeOrder.total.toLocaleString()}`;
+            const cakeLines = activeOrder.details
+                .map(d => `• *${d.label}:* ${d.val}`)
+                .join('\n');
+
+            const rawMessage =
+                `*NEW ORDER - CRUMB & CREAM BAKERY*\n\n` +
+                `*Customer Details:*\n` +
+                `• *Name:* ${name}\n` +
+                `• *Phone:* ${phone}\n` +
+                `• *Delivery Date:* ${date}\n` +
+                `• *Address:* ${address}\n\n` +
+                `*Order Details (${activeOrder.type}):*\n` +
+                `${cakeLines}\n\n` +
+                `*Total Amount:* Rs. ${activeOrder.total.toLocaleString()}`;
 
             const bakeryWhatsApp = "923001234567";
-            window.open(`https://wa.me/${bakeryWhatsApp}?text=${message}`, '_blank');
+            window.open(`https://wa.me/${bakeryWhatsApp}?text=${encodeURIComponent(rawMessage)}`, '_blank');
         }
 
         window.addEventListener('DOMContentLoaded', () => {
